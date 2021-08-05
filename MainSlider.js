@@ -191,9 +191,9 @@ class MainSlider {
     }
     /// fukcja przypisujaca ostatni index zamiast kolejnego indexu (dla intervalu )
     changeValueOfVariables = () => {
-        if (this.intervalUsed) {
+       
             this.remaindMeLastIndex = this.indexOfShowedSlider
-        }
+       
     }
     addStartedActive = () => {
 
@@ -392,14 +392,18 @@ class MainSlider {
 
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
+                    this.changeValueOfVariables()
                     this.indexManualyChanged = true
                     this.changeIndexByClickOnDot(e)
+                    this.removeActiveForAnItems(this.controlPanelElements)
+                    this.addActiveForAnItem(e.target)
 
                     if (this.animation === "fade") {
                         this.removeActiveForAnItems(this.sliderElements)
                         this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
-                        this.removeActiveForAnItems(this.controlPanelElements)
-                        this.addActiveForAnItem(e.target)
+                    }
+                    if(this.animation === "horizontal100"){
+                        this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                     }
                 })
 
@@ -410,6 +414,22 @@ class MainSlider {
         })
 
         this.controlPanelElements = this.controlPanel.querySelectorAll(".js__MainSlider-control-element")
+
+    }
+
+
+    moveIntoSlideWithIndex=(index)=>{
+this.resetContainer()
+this.addTransition(false)
+console.log(index);
+
+this.slider.style.transform=`translateX(-${this.remaindMeLastIndex*this.widthOfVisibleElement}px)`
+console.log(`translateX(-${index*this.widthOfVisibleElement}px)`);
+
+setTimeout(()=>{
+    this.addTransition(true)
+    this.slider.style.transform=`translateX(-${index*this.widthOfVisibleElement}px)`
+},100)
 
     }
     /// resetuje caly container w ktorym sa slidy i nadaje je od nowa tak jak byly na poczatku
