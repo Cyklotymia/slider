@@ -287,16 +287,7 @@ this.elementsToCopy=[]
 
     }
     /// po kliknieciu zmienia index na ten krory jest zapisany w dacieset w kropce
-    changeIndexByClickOnDot = (e) => {
-        if (this.intervalUsed) {
-            this.remaindMeLastIndex = this.indexOfShowedSlider
-
-
-        }
-        this.indexOfShowedSlider = parseInt(e.target.dataset.index)
-        // console.log(this.indexOfShowedSlider +"index z daty od kropki");
-
-    }
+   
     // zmiana zmiennej na podstawie aktywnej kropki SHOULD BE ANIMATED
     checkDot = (e) => {
         this.shouldBeAnimated = e.target.classList.contains("active") ? false : true
@@ -383,7 +374,8 @@ this.elementsToCopy=[]
 
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
-                    
+                    this.indexManualyChanged=true
+                    this.changeIndexByClickOnDot(e)
                    
                     if(this.animation==="fade"){
                         this.removeActiveForAnItems(this.sliderElements)
@@ -917,6 +909,15 @@ removeActiveForAnItems=(groupOfItems)=>{
     groupOfItems.forEach(item=>{
         item.classList.remove("active")
     })
+}
+
+
+
+changeIndexByClickOnDot = (e) => {
+      
+    this.indexOfShowedSlider = parseInt(e.target.dataset.index)
+    console.log(this.indexOfShowedSlider +"index z daty od kropki");
+
 }
 
 }
