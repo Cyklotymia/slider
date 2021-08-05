@@ -85,15 +85,11 @@ this.elementsToCopy=[]
     /// odczytuje dane i odpala funkcje na podstawie podanych opcji
     initSlider = () => {
         if (this.controlPanel) {
-            // tworzy kontrol panel
             this.checkAmountOfElements()
-            window.addEventListener('resize', () => {
+            this.createControlPanel(this.amountOfVisibleElements)
+            window.addEventListener('resize',()=>{
                 this.checkAmountOfElements()
-                
             })
-            this.createControlPanel();
-            // dodaje poczatkowe active na podstawie html
-            this.addStartedActive();
         }
         /// strzałka w lewo
         if (this.arrowLeft) {
@@ -177,17 +173,16 @@ this.elementsToCopy=[]
         if (this.animation === "horizontal100") {
             this.readWidthOfVisibleElement()
         }
-        if (this.animation === "horizontal100-s") {
+        if (this.animation === "horizontal100-s" ||this.animation === "horizontal100" ) {
             this.readWidthOfVisibleElement()
-            this.createControlPanel(this.amountOfVisibleElements)
+          
             this.addStartedActive();
 
 
         }
         if (this.animation === "vertical100-s") {
             this.readHeightOfVisibleElement()
-            this.createControlPanel(this.amountOfVisibleElements)
-            // this.addStartedActive();
+         
         }
     }
     /// fukcja przypisujaca ostatni index zamiast kolejnego indexu (dla intervalu )
