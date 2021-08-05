@@ -90,6 +90,7 @@ this.elementsToCopy=[]
             window.addEventListener('resize',()=>{
                 this.checkAmountOfElements()
             })
+            this.addStartedActive()
         }
         /// strzałka w lewo
         if (this.arrowLeft) {
@@ -382,51 +383,20 @@ this.elementsToCopy=[]
 
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
-                    /// zmiana wartosci should be animated
-                    this.checkDot(e);
-                    /// czy index zmienil sie automatycznie czy zostal klikniety
-                    this.indexManualyChanged = true;
-                    // zmiana indexu na index z datyset kropki
-                    this.changeIndexByClickOnDot(e);
-                    // dodanie active do kliknietej kropki
-                    this.changeActiveControlElement()
-                    /// odpalenie funkcji zmieniajacej slider
-                    this.showSliderWithIndex(e)
+                    
+                   
+                    if(this.animation==="fade"){
+                        this.removeActiveForAnItems(this.sliderElements)
+                        this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
+                        this.removeActiveForAnItems(this.controlPanelElements)
+                        this.addActiveForAnItem(e.target)
+                    }
                 })
 
 
 
             }
-            if (numberOfDots === null) {
-
-                this.createElement("div", "js__MainSlider-control-element", index, this.controlPanel).addEventListener("click", (e) => {
-                    // jak fade
-                    clearInterval(this.intervalForSlider)
-                    if (this.animation === "fade") {
-                        /// zmiana indexu
-                        this.changeIndexByClickOnDot(e)
-                        /// zmiana slajdu
-                        this.changeSlide()
-                    }
-
-                    if (this.animation === "horizontal100") {
-                        /// zmiana wartosci should be animated
-                        this.checkDot(e);
-                        /// czy index zmienil sie automatycznie czy zostal klikniety
-                        this.indexManualyChanged = true;
-                        // zmiana indexu na index z datyset kropki
-                        this.changeIndexByClickOnDot(e);
-                        // dodanie active do kliknietej kropki
-                        this.changeActiveControlElement()
-                        /// odpalenie funkcji zmieniajacej slider
-                        this.showSliderWithIndex(e)
-
-                    }
-
-
-                })
-            }
-
+           
         })
 
         this.controlPanelElements = this.controlPanel.querySelectorAll(".js__MainSlider-control-element")
@@ -940,9 +910,17 @@ readyToClick= ()=>{
    },this.transition*1000)
 }
 
-
-  
+addActiveForAnItem=(item)=>{
+item.classList.add("active")
 }
+removeActiveForAnItems=(groupOfItems)=>{
+    groupOfItems.forEach(item=>{
+        item.classList.remove("active")
+    })
+}
+
+}
+
 
 
 
