@@ -406,11 +406,15 @@ class MainSlider {
 
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
+                    this.changeValueOfVariables()
                     if (this.amountOfVisibleElements>1) {
                         console.log('bedzie fadowac');
+                        this.resetContainer()
+                        
+                        this.fadeElements(parseInt(e.target.dataset.index))
+
                         return
                     }
-                    this.changeValueOfVariables()
                     this.indexManualyChanged = true
                     this.changeIndexByClickOnDot(e)
                     this.removeActiveForAnItems(this.controlPanelElements)
@@ -471,6 +475,29 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     //     // console.log(this.indexOfShowedSlider+"index w dodaniu active do kropki");
 
     // }
+
+
+    fadeElements=(index)=>{
+        console.log(index);
+        this.addTransition(false)
+        console.log(this.remaindMeLastIndex + "ostatni index");
+        this.slider.style.transform=`translateX(-${this.remaindMeLastIndex*this.widthOfVisibleElement}px)`
+        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+        let delay=1
+        this.sliderElements.forEach((sliderElement,index)=>{
+            delay=index
+            this.sliderElements[index].style.transitionDelay = `.${delay}s`;
+            sliderElement.style.opacity="0"
+            console.log(delay);
+            setTimeout(()=>{
+                sliderElement.style.transitionDuration=`.2s`
+                sliderElement.style.opacity="1"
+            },200)
+           
+        })
+
+    
+    }
 
     increseDotIndex=()=>{
         
