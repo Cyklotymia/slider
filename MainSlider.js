@@ -197,10 +197,13 @@ class MainSlider {
        
             this.remaindMeLastIndex = this.indexOfShowedSlider
            
-                if (this.controlPanelElements[this.controlPanelElements.length-2].classList.contains("active")) {
+                if (this.controlPanelElements[this.controlPanelElements.length-2].classList.contains("active")||this.controlPanelElements[this.controlPanelElements.length-1].classList.contains("active")) {
+                    this.shouldICopy=true
+                }else if(this.controlPanelElements[0].classList.contains("active")){
                     this.shouldICopy=true
                 }else{
                     this.shouldICopy=false
+
                 }
            
        
@@ -980,9 +983,9 @@ this.indexOfShowedSlider=0
     }
     removeCloneElementsForRight = () => {
         
-       this.sliderElements.forEach(el=>{
-           console.log(el +"  "+ el.textContent + "      slider pokolei");
-       })
+    //    this.sliderElements.forEach(el=>{
+    //        console.log(el +"  "+ el.textContent + "      slider pokolei");
+    //    })
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.indexOfShowedSlider) {
                 console.log(sliderElement.textContent+"usuwam");
