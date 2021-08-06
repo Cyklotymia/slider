@@ -406,6 +406,10 @@ class MainSlider {
 
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
+                    if (this.amountOfVisibleElements>1) {
+                        console.log('bedzie fadowac');
+                        return
+                    }
                     this.changeValueOfVariables()
                     this.indexManualyChanged = true
                     this.changeIndexByClickOnDot(e)
@@ -894,14 +898,17 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         
         if (this.shouldICopy) {
 
-            this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*this.sliderElements.lenght-2}px)`
+            // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*this.sliderElements.lenght}px)`
+      
+           
             this.copyElementsForRight()
+
              setTimeout(() => {
              this.removeCloneElementsForRight()
              this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-            
+            console.log(this.indexOfShowedSlider +"index of showed slider");
              this.addTransition(false)
-             this.slider.style.transform = `translateX(0px)`
+             this.slider.style.transform = `translateX(-${0}px)`
             
            
            
