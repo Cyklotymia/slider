@@ -264,9 +264,9 @@ class MainSlider {
 
             clearInterval(this.intervalForSlider)
             if (this.animation === "fade") {
-               console.log(e.target.closest(".js__MainSlider-arrow--right"));
+              
                 if (touchStart > touchEnd) {
-                    console.log('robie');
+                   
                     this.increaseIndex()
 
                 } else {
@@ -407,19 +407,19 @@ class MainSlider {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
                     this.changeValueOfVariables()
+                    this.indexManualyChanged = true
+                    this.removeActiveForAnItems(this.controlPanelElements)
+                    this.addActiveForAnItem(e.target)
                     if (this.amountOfVisibleElements>1) {
-                        console.log('bedzie fadowac');
+                       
                         this.resetContainer()
                         
                         this.fadeElements(parseInt(e.target.dataset.index))
-
+                        
                         return
                     }
-                    this.indexManualyChanged = true
+                    
                     this.changeIndexByClickOnDot(e)
-                    this.removeActiveForAnItems(this.controlPanelElements)
-                    this.addActiveForAnItem(e.target)
-
                     if (this.animation === "fade") {
                         this.removeActiveForAnItems(this.sliderElements)
                         this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
@@ -446,7 +446,7 @@ this.addTransition(false)
 
 this.indexOfShowedSlider=index
 this.slider.style.transform=`translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
-console.log(`translateX(-${index*this.widthOfVisibleElement}px)`);
+
 
 setTimeout(()=>{
     this.addTransition(true)
@@ -463,34 +463,26 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         })
     }
 
-    // changeActiveControlElement = () => {
-
-    //     this.controlPanelElements.forEach(controlPanelElement => {
-    //         controlPanelElement.classList.remove("active")
-            
-    //     })
-
-
-    //     this.controlPanelElements[this.indexOfShowedSlider].classList.add("active")
-    //     // console.log(this.indexOfShowedSlider+"index w dodaniu active do kropki");
-
-    // }
 
 
     fadeElements=(index)=>{
-        console.log(index);
+     
         this.addTransition(false)
-        console.log(this.remaindMeLastIndex + "ostatni index");
-        this.slider.style.transform=`translateX(-${this.remaindMeLastIndex*this.widthOfVisibleElement}px)`
+     
+        this.slider.style.transform=`translateX(-${index*this.widthOfVisibleElement}px)`
+     
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-        let delay=1
+        let delay=0.1
+        this.indexOfShowedSlider=index
         this.sliderElements.forEach((sliderElement,index)=>{
-            delay=index
-            this.sliderElements[index].style.transitionDelay = `.${delay}s`;
+            delay=index%this.amountOfVisibleElements*0.1
+           
+            
+            this.sliderElements[index].style.transitionDelay = `${delay}s`;
             sliderElement.style.opacity="0"
-            console.log(delay);
+            
             setTimeout(()=>{
-                sliderElement.style.transitionDuration=`.2s`
+                sliderElement.style.transitionDuration=`.5s`
                 sliderElement.style.opacity="1"
             },200)
            
@@ -514,7 +506,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         
         this.indexOfLastActiveDot = this.indexOfLastActiveDot > this.controlPanelElements.length - 1 ? 0 : this.indexOfLastActiveDot
         this.indexOfLastActiveDot = this.indexOfLastActiveDot < 0 ? this.controlPanelElements.length - 1 : this.indexOfLastActiveDot
-        console.log(this.indexOfLastActiveDot);
+      
         
 
         this.controlPanelElements[this.indexOfLastActiveDot].classList.add("active")
@@ -559,7 +551,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
     setInterval = () => {
         this.intervalForSlider = setInterval(() => {
-            // console.log('odpala sie interval');
+            console.log('odpalam interval');
             this.intervalUsed = true;
             if (this.animation === "fade") {
                 this.increaseIndex();
@@ -709,13 +701,13 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         }
         // po jakims czasie zmienia style i przerzuca ostatni element
         setTimeout(() => {
-            // console.log('zmieniam transform na 0');
+          
             // daje transform na 0
             this.slider.style.transform = `translateX(0px)`
             if (this.animation === "vertical100-s") {
                 this.slider.style.transform = `translateY(0px)`
             }
-            // console.log('nie mam transition');
+           
             // daje transition na 0 (zeby nie bylo widac ze sie cos wydarzylo)
             this.addTransition(false)
             // daje ostatni element na koniec slidera
@@ -772,7 +764,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         }
         /// przerzuca slidy ( index tu jest dla clg zeby sprawdzic)
         itemsToAppend.forEach((itemToAppend, index) => {
-            // console.log(itemToAppend, index);
+          
 
             this.slider.appendChild(itemToAppend)
 
@@ -919,27 +911,29 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     moveIntoNextSlide = () => {
         this.addTransition(true)
         this.increseDotIndex()
+        console.log(this.indexOfShowedSlider);
         this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
+       
         this.indexOfShowedSlider+=1
         this.changeValueOfVariables()
         
         if (this.shouldICopy) {
 
             // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*this.sliderElements.lenght}px)`
-      
+      console.log('copy');
            
             this.copyElementsForRight()
 
              setTimeout(() => {
              this.removeCloneElementsForRight()
              this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-            console.log(this.indexOfShowedSlider +"index of showed slider");
+           
              this.addTransition(false)
              this.slider.style.transform = `translateX(-${0}px)`
             
            
            
-this.indexOfShowedSlider=0
+            this.indexOfShowedSlider=0
 
 
         }, this.transition * 1000)
@@ -964,7 +958,7 @@ this.indexOfShowedSlider=0
 
     }
     moveIntoPrevSlide = () => {
-        console.log('ruszam w lewo');
+       
         this.copyElementsForLeft()
         this.addTransition(false)
         this.slider.style.transform = `translateX(-${this.widthOfVisibleElement}px)`
@@ -974,8 +968,7 @@ this.indexOfShowedSlider=0
             this.slider.style.transform = `translateX(0px)`
             this.indexOfShowedSlider -= 1
             this.repairIndex()
-            // this.changeActiveControlElement()
-            console.log('odejmij potem kropke');
+         
         }, 100)
     }
 
@@ -995,11 +988,18 @@ this.indexOfShowedSlider=0
 
     }
 
+
+
+
+
     copyElementsForRight = () => {
+
+
+       
         if (this.amountOfVisibleElements>1) {
             this.sliderElements.forEach((sliderElement, index) => {
-                if (index < this.amountOfVisibleElements) {
-                    console.log(sliderElement.textContent+"dodaje");
+                if (index < this.amountOfVisibleElements*this.indexOfShowedSlider) {
+                    console.log(sliderElement.textContent + "  kopiuje");
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
     
                 }
@@ -1028,16 +1028,18 @@ this.indexOfShowedSlider=0
 
 
     }
+
+
+
+  
     removeCloneElementsForRight = () => {
         
-    //    this.sliderElements.forEach(el=>{
-    //        console.log(el +"  "+ el.textContent + "      slider pokolei");
-    //    })
+ 
     if (this.amountOfVisibleElements>1) {
         this.sliderElements.forEach((sliderElement, index) => {
-            if (index < this.amountOfVisibleElements) {
-                console.log(sliderElement.textContent+"usuwam");
-                
+            if (index < this.amountOfVisibleElements*this.indexOfShowedSlider) {
+               
+                console.log(sliderElement.textContent + "  usuwam");
                 this.slider.removeChild(sliderElement)
 
             }
@@ -1045,7 +1047,7 @@ this.indexOfShowedSlider=0
     }else{
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.indexOfShowedSlider) {
-                console.log(sliderElement.textContent+"usuwam");
+              
                 
                 this.slider.removeChild(sliderElement)
 
