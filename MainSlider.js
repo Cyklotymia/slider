@@ -205,6 +205,7 @@ class MainSlider {
                     this.shouldICopy=false
 
                 }
+                
            
        
     }
@@ -415,7 +416,7 @@ class MainSlider {
                         this.removeActiveForAnItems(this.sliderElements)
                         this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
                     }
-                    if(this.animation === "horizontal100"){
+                    if(this.animation === "horizontal100"||this.animation === "horizontal100-s"){
                         this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                     }
                 })
@@ -961,6 +962,10 @@ this.indexOfShowedSlider=0
     }
 
     copyElementsForRight = () => {
+        if (this.amountOfVisibleElements>1) {
+            console.log('tu naprawic');
+            return
+        }
 
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.indexOfShowedSlider) {
@@ -986,6 +991,10 @@ this.indexOfShowedSlider=0
     //    this.sliderElements.forEach(el=>{
     //        console.log(el +"  "+ el.textContent + "      slider pokolei");
     //    })
+    if (this.amountOfVisibleElements>1) {
+        console.log('tu naprawic');
+        return
+    }
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.indexOfShowedSlider) {
                 console.log(sliderElement.textContent+"usuwam");
