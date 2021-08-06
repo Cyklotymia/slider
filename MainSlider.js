@@ -481,8 +481,8 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             
         })
         
-        this.indexOfLastActiveDot = this.indexOfLastActiveDot > this.sliderElements.length - 1 ? 0 : this.indexOfLastActiveDot
-        this.indexOfLastActiveDot = this.indexOfLastActiveDot < 0 ? this.sliderElements.length - 1 : this.indexOfLastActiveDot
+        this.indexOfLastActiveDot = this.indexOfLastActiveDot > this.controlPanelElements.length - 1 ? 0 : this.indexOfLastActiveDot
+        this.indexOfLastActiveDot = this.indexOfLastActiveDot < 0 ? this.controlPanelElements.length - 1 : this.indexOfLastActiveDot
         console.log(this.indexOfLastActiveDot);
         
 
@@ -963,17 +963,25 @@ this.indexOfShowedSlider=0
 
     copyElementsForRight = () => {
         if (this.amountOfVisibleElements>1) {
-            console.log('tu naprawic');
-            return
-        }
+            this.sliderElements.forEach((sliderElement, index) => {
+                if (index < this.amountOfVisibleElements) {
+                    console.log(sliderElement.textContent+"dodaje");
+                    this.elementsToCopy.push(sliderElement.cloneNode(true))
+    
+                }
+            })
+    
+    
+         
+        }else{
 
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.indexOfShowedSlider) {
-                console.log(sliderElement.textContent+"dodaje");
+               
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
 
             }
-        })
+        })}
 
 
         this.elementsToCopy.forEach(elementToCopy => {
@@ -992,9 +1000,15 @@ this.indexOfShowedSlider=0
     //        console.log(el +"  "+ el.textContent + "      slider pokolei");
     //    })
     if (this.amountOfVisibleElements>1) {
-        console.log('tu naprawic');
-        return
-    }
+        this.sliderElements.forEach((sliderElement, index) => {
+            if (index < this.amountOfVisibleElements) {
+                console.log(sliderElement.textContent+"usuwam");
+                
+                this.slider.removeChild(sliderElement)
+
+            }
+        })
+    }else{
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.indexOfShowedSlider) {
                 console.log(sliderElement.textContent+"usuwam");
@@ -1003,6 +1017,7 @@ this.indexOfShowedSlider=0
 
             }
         })
+    }
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
     }
