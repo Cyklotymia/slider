@@ -43,6 +43,8 @@ class MainSlider {
         this.transition = 1
         this.indexOfItemToRemove = 0
         this.canIClick = true
+        this.shouldICopy=false
+        this.indexOfLastActiveDot=0
 
         
 
@@ -53,6 +55,7 @@ class MainSlider {
         this.readIndex(); // pobranie staryujacego indexu
         this.getVariables(); // przypisuje wartości do w.w elementow
         this.initSlider(); // po odczytaniu danych odpala funkcje ktore powinien
+        this.addDatasetForSliders()
         
 
 
@@ -193,6 +196,13 @@ class MainSlider {
     changeValueOfVariables = () => {
        
             this.remaindMeLastIndex = this.indexOfShowedSlider
+           
+                if (this.controlPanelElements[this.controlPanelElements.length-2].classList.contains("active")) {
+                    this.shouldICopy=true
+                }else{
+                    this.shouldICopy=false
+                }
+           
        
     }
     addStartedActive = () => {
@@ -421,16 +431,17 @@ class MainSlider {
     moveIntoSlideWithIndex=(index)=>{
 this.resetContainer()
 this.addTransition(false)
-console.log(index);
 
-this.slider.style.transform=`translateX(-${this.remaindMeLastIndex*this.widthOfVisibleElement}px)`
+this.indexOfShowedSlider=index
+this.slider.style.transform=`translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
 console.log(`translateX(-${index*this.widthOfVisibleElement}px)`);
 
 setTimeout(()=>{
     this.addTransition(true)
     this.slider.style.transform=`translateX(-${index*this.widthOfVisibleElement}px)`
 },100)
-
+this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+    this.indexOfLastActiveDot=index
     }
     /// resetuje caly container w ktorym sa slidy i nadaje je od nowa tak jak byly na poczatku
     resetContainer = () => {
@@ -440,16 +451,38 @@ setTimeout(()=>{
         })
     }
 
-    changeActiveControlElement = () => {
+    // changeActiveControlElement = () => {
 
+    //     this.controlPanelElements.forEach(controlPanelElement => {
+    //         controlPanelElement.classList.remove("active")
+            
+    //     })
+
+
+    //     this.controlPanelElements[this.indexOfShowedSlider].classList.add("active")
+    //     // console.log(this.indexOfShowedSlider+"index w dodaniu active do kropki");
+
+    // }
+
+    increseDotIndex=()=>{
+        
+        this.controlPanelElements.forEach((controlPanelElement,index) => {
+            if (controlPanelElement.classList.contains("active")) {
+                 this.indexOfLastActiveDot=index+1
+            }
+            
+        })
         this.controlPanelElements.forEach(controlPanelElement => {
             controlPanelElement.classList.remove("active")
+            
         })
+        
+        this.indexOfLastActiveDot = this.indexOfLastActiveDot > this.sliderElements.length - 1 ? 0 : this.indexOfLastActiveDot
+        this.indexOfLastActiveDot = this.indexOfLastActiveDot < 0 ? this.sliderElements.length - 1 : this.indexOfLastActiveDot
+        console.log(this.indexOfLastActiveDot);
+        
 
-
-        this.controlPanelElements[this.indexOfShowedSlider].classList.add("active")
-        // console.log(this.indexOfShowedSlider+"index w dodaniu active do kropki");
-
+        this.controlPanelElements[this.indexOfLastActiveDot].classList.add("active")
     }
     shouldBeClear = (variable) => {
 
@@ -739,6 +772,7 @@ setTimeout(()=>{
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.amountOfVisibleElements) {
                 itemsToRemove.push(sliderElement)
+               
                 this.slider.removeChild(sliderElement)
             }
 
@@ -770,7 +804,8 @@ setTimeout(()=>{
 
 
         /// zmienia kropke
-        this.changeActiveControlElement()
+        // this.changeActiveControlElement()
+        this.increseDotIndex()
 
     }
 
@@ -848,22 +883,43 @@ setTimeout(()=>{
 
     moveIntoNextSlide = () => {
         this.addTransition(true)
+        this.increseDotIndex()
+        this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
+        this.indexOfShowedSlider+=1
+        this.changeValueOfVariables()
+        
+        if (this.shouldICopy) {
 
-        this.slider.style.transform = `translateX(-${this.widthOfVisibleElement}px)`
-        this.copyElementsForRight()
-        setTimeout(() => {
-            this.removeCloneElementsForRight()
-            this.addTransition(false)
-            this.slider.style.transform = `translateX(0px)`
-            this.indexOfShowedSlider += 1
-            this.repairIndex()
-            this.changeActiveControlElement()
+            this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*this.sliderElements.lenght-2}px)`
+            this.copyElementsForRight()
+             setTimeout(() => {
+             this.removeCloneElementsForRight()
+             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+            
+             this.addTransition(false)
+             this.slider.style.transform = `translateX(0px)`
+            
+           
+           
+this.indexOfShowedSlider=0
+
 
         }, this.transition * 1000)
+        }
+        // this.copyElementsForRight()
+        // setTimeout(() => {
+        //     this.removeCloneElementsForRight()
+        //     this.addTransition(false)
+        //     this.slider.style.transform = `translateX(0px)`
+        //     this.indexOfShowedSlider += 1
+        //     this.repairIndex()
+        //     this.changeActiveControlElement()
+
+        // }, this.transition * 1000)
 
 
-        //    setTimeout(()=>{
-        //    },this.intervalTime)
+        // //    setTimeout(()=>{
+        // //    },this.intervalTime)
 
 
 
@@ -880,7 +936,8 @@ setTimeout(()=>{
             this.slider.style.transform = `translateX(0px)`
             this.indexOfShowedSlider -= 1
             this.repairIndex()
-            this.changeActiveControlElement()
+            // this.changeActiveControlElement()
+            console.log('odejmij potem kropke');
         }, 100)
     }
 
@@ -903,7 +960,8 @@ setTimeout(()=>{
     copyElementsForRight = () => {
 
         this.sliderElements.forEach((sliderElement, index) => {
-            if (index < this.amountOfVisibleElements) {
+            if (index < this.indexOfShowedSlider) {
+                console.log(sliderElement.textContent+"dodaje");
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
 
             }
@@ -921,9 +979,14 @@ setTimeout(()=>{
 
     }
     removeCloneElementsForRight = () => {
+        
+       this.sliderElements.forEach(el=>{
+           console.log(el +"  "+ el.textContent + "      slider pokolei");
+       })
         this.sliderElements.forEach((sliderElement, index) => {
-            if (index < this.amountOfVisibleElements) {
-
+            if (index < this.indexOfShowedSlider) {
+                console.log(sliderElement.textContent+"usuwam");
+                
                 this.slider.removeChild(sliderElement)
 
             }
@@ -966,6 +1029,11 @@ setTimeout(()=>{
     }
 
 
+addDatasetForSliders=()=>{
+    this.sliderElements.forEach((sliderElement,index)=>{
+        sliderElement.dataset.index=index
+    })
+}
 
 
 
