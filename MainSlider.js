@@ -43,10 +43,10 @@ class MainSlider {
         this.transition = 1
         this.indexOfItemToRemove = 0
         this.canIClick = true
-        this.shouldICopy=false
-        this.indexOfLastActiveDot=0
-
         
+        this.indexOfLastActiveDot=0
+        this.numberOfElementsToFill=0
+        this.lastElementWasClicked=false
 
         ////
         this.remaindMeLastIndex = this.indexOfShowedSlider // zapamietuje ostatni index
@@ -127,7 +127,7 @@ class MainSlider {
                     // //pokazuje slider z indexem
                     // this.showSliderWithIndex()
                     if (this.canIClick) {
-
+                        
                         this.canIClick = false
                         this.moveIntoPrevSlide()
                         this.readyToClick()
@@ -152,7 +152,7 @@ class MainSlider {
                     /////////////////////////////////
 
                     if (this.canIClick) {
-
+                        
                         this.canIClick = false
                         this.moveIntoNextSlide()
                         this.readyToClick()
@@ -197,14 +197,6 @@ class MainSlider {
        
             this.remaindMeLastIndex = this.indexOfShowedSlider
            
-                if (this.controlPanelElements[this.controlPanelElements.length-2].classList.contains("active")||this.controlPanelElements[this.controlPanelElements.length-1].classList.contains("active")) {
-                    this.shouldICopy=true
-                }else if(this.controlPanelElements[0].classList.contains("active")){
-                    this.shouldICopy=true
-                }else{
-                    this.shouldICopy=false
-
-                }
                 
            
        
@@ -407,13 +399,21 @@ class MainSlider {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
                     this.changeValueOfVariables()
+                    this.lastElementWasClicked=false
                     this.indexManualyChanged = true
                     this.removeActiveForAnItems(this.controlPanelElements)
                     this.addActiveForAnItem(e.target)
                     if (this.amountOfVisibleElements>1) {
-                       
-                        this.resetContainer()
                         
+                        
+                        this.resetContainer()
+                        if (this.isTheLast(parseInt(e.target.dataset.index))) {
+                            console.log('ostatnia kropka');
+                        //    this.indexOfShowedSlider=this.controlPanelElements.length-1
+                            this.lastElementWasClicked=true
+                        
+                           
+                        }
                         this.fadeElements(parseInt(e.target.dataset.index))
                         
                         return
@@ -440,6 +440,21 @@ class MainSlider {
     }
 
 
+isTheLast=(indexOfClickedDot)=>{
+    let flag
+    
+this.controlPanelElements.forEach(controlPanelElement=>{
+    if (indexOfClickedDot===this.controlPanelElements.length-1) {
+      flag= true 
+      
+    }
+   
+   
+})
+ return flag
+}
+
+    
     moveIntoSlideWithIndex=(index)=>{
 this.resetContainer()
 this.addTransition(false)
@@ -909,18 +924,27 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
 
     moveIntoNextSlide = () => {
+        if (this.lastElementWasClicked) {
+           this.addTransition(true)
+            this.slider.style.transform = `translateX(0px)`
+            this.lastElementWasClicked=false
+            this.indexOfShowedSlider=0
+            this.changeValueOfVariables()
+
+            return
+        }
         this.addTransition(true)
         this.increseDotIndex()
-        console.log(this.indexOfShowedSlider);
+        
         this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
-       
+        
         this.indexOfShowedSlider+=1
         this.changeValueOfVariables()
         
-        if (this.shouldICopy) {
-
-            // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*this.sliderElements.lenght}px)`
-      console.log('copy');
+       
+            
+            this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*this.sliderElements.lenght}px)`
+      
            
             this.copyElementsForRight()
 
@@ -937,7 +961,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
 
         }, this.transition * 1000)
-        }
+        
         // this.copyElementsForRight()
         // setTimeout(() => {
         //     this.removeCloneElementsForRight()
@@ -954,9 +978,25 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         // //    },this.intervalTime)
 
 
-
-
+        
     }
+
+
+
+
+    // fill=()=>{
+    //     this.numberOfElementsToFill=this.amountOfVisibleElements-(this.sliderElements.length%this.amountOfVisibleElements)
+ 
+
+
+
+        
+
+
+    // }
+
+
+
     moveIntoPrevSlide = () => {
        
         this.copyElementsForLeft()
@@ -995,10 +1035,11 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     copyElementsForRight = () => {
 
 
-       
+     
         if (this.amountOfVisibleElements>1) {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.amountOfVisibleElements*this.indexOfShowedSlider) {
+                    
                     console.log(sliderElement.textContent + "  kopiuje");
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
     
@@ -1011,7 +1052,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.indexOfShowedSlider) {
-               
+              
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
 
             }
@@ -1020,6 +1061,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
         this.elementsToCopy.forEach(elementToCopy => {
             this.slider.appendChild(elementToCopy)
+            
         })
 
         this.elementsToCopy = []
