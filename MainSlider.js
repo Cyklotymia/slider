@@ -127,10 +127,14 @@ class MainSlider {
                     // //pokazuje slider z indexem
                     // this.showSliderWithIndex()
                     if (this.canIClick) {
-                        
+                      
                         this.canIClick = false
                         this.moveIntoPrevSlide()
                         this.readyToClick()
+                        if (this.sliderElements.length%this.amountOfVisibleElements) {
+                            this.removeActiveForAnItems(this.controlPanelElements)
+                            
+                        }
                     }
                 }
 
@@ -152,10 +156,13 @@ class MainSlider {
                     /////////////////////////////////
 
                     if (this.canIClick) {
-                        
                         this.canIClick = false
                         this.moveIntoNextSlide()
                         this.readyToClick()
+                        if (this.sliderElements.length%this.amountOfVisibleElements) {
+                            this.removeActiveForAnItems(this.controlPanelElements)
+                            
+                        }
                     }
 
                 }
@@ -581,8 +588,11 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
 
                 ////////////////////////////////////////
-
                 this.moveIntoNextSlide()
+                if (this.sliderElements.length%this.amountOfVisibleElements) {
+                    this.removeActiveForAnItems(this.controlPanelElements)
+                    
+                }
 
             }
         }, this.intervalTime)
