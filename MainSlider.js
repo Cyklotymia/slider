@@ -297,11 +297,16 @@ class MainSlider {
             if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
                 this.indexManualyChanged = true
                 if (touchStart > touchEnd) {
-                    this.changeValueOfVariables()
-                    this.increaseIndex()
-                    this.shouldBeAnimated = true
-                    this.addTransition(true)
-                    this.showSliderWithIndex()
+                    if (this.canIClick) {
+                        this.canIClick = false
+                        this.moveIntoNextSlide()
+                        this.readyToClick()
+                        if (this.sliderElements.length % this.amountOfVisibleElements) {
+                            this.removeActiveForAnItems(this.controlPanelElements)
+
+                        }
+                    }
+                
                 } else {
                     this.changeValueOfVariables()
                     this.reduceIndex()
