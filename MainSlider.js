@@ -428,14 +428,26 @@ class MainSlider {
                     this.indexManualyChanged = true
                     this.removeActiveForAnItems(this.controlPanelElements)
                     this.addActiveForAnItem(e.target)
-                    if (this.dotClicked && this.amountOfVisibleElements ===1) {
-                        console.log('kolejny klik');
-                        this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
-                        return
-                    }
-                    this.dotClicked=true
+                   
+                 
                     if (this.amountOfVisibleElements>1 && this.sliderElements.length%this.amountOfVisibleElements) {
-                       
+                        if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
+                            // this.resetContainer()
+                            console.log('ostatniaale kliknieta ktorys raz');
+                            this.lastElementWasClicked=true
+                            this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
+                            this.fillEmptySpace()
+
+                            return
+                        }
+                        if (this.dotClicked) {
+                            console.log('kolejny klik');
+                            console.log(this.indexOfLastActiveDot);
+                            this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
+                            this.indexOfLastActiveDot=parseInt(e.target.dataset.index)
+                            
+                            return
+                        }
                         
                         this.resetContainer()
                         if (this.isTheLast(parseInt(e.target.dataset.index))) {
@@ -447,10 +459,11 @@ class MainSlider {
                             
                         }
                         this.fadeElements(parseInt(e.target.dataset.index))
-                        
+                        this.dotClicked=true
+                        this.indexOfLastActiveDot=parseInt(e.target.dataset.index)
                         return
                     }
-                    
+                    this.dotClicked=true
                     this.changeIndexByClickOnDot(e)
                     if (this.animation === "fade") {
                         this.removeActiveForAnItems(this.sliderElements)
@@ -459,7 +472,12 @@ class MainSlider {
                     }
                     if(this.animation === "horizontal100"||this.animation === "horizontal100-s"){
                         this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
+                        this.dotClicked=true
+                        this.indexOfLastActiveDot=parseInt(e.target.dataset.index)
                     }
+                   
+                  
+                  
                 })
 
 
@@ -469,6 +487,7 @@ class MainSlider {
         })
 
         this.controlPanelElements = this.controlPanel.querySelectorAll(".js__MainSlider-control-element")
+
 
     }
 
@@ -829,9 +848,11 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     }
 
     fillEmptySpace = () => {
+       
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         const itemsToAppend=[]
       const numberOfItemsToAppend=this.amountOfVisibleElements-(this.sliderElements.length%this.amountOfVisibleElements)
+     
     //   console.log(numberOfItemsToAppend)
       for (let index = 0; index < numberOfItemsToAppend; index++) {
           itemsToAppend.push(this.sliderElements[index].cloneNode(true))
@@ -839,6 +860,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
       }
       itemsToAppend.forEach(itemToAppend=>{
           this.slider.appendChild(itemToAppend)
+          console.log(itemToAppend.textContent + "dupa");
       })
 
     }
@@ -975,7 +997,7 @@ checkWhichDotNeedToBeActive=(way,index=null)=>{
 
 
     moveIntoNextSlide = () => {
-       
+        this.dotClicked=false
         if (this.lastElementWasClicked) {
             const numberOfItemsToDelate= this.amountOfVisibleElements-(this.startingSliderElements.length%this.amountOfVisibleElements)
          
