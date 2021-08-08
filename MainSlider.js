@@ -419,10 +419,10 @@ class MainSlider {
 
         this.sliderElements.forEach((sliderElement, index) => {
             if (numberOfDots && index % numberOfDots === 0) {
-
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
                     this.changeValueOfVariables()
+                    this.checkWhichDotNeedToBeActive("dot",parseInt(e.target.dataset.index))
                     this.lastElementWasClicked=false
                     this.indexManualyChanged = true
                     this.removeActiveForAnItems(this.controlPanelElements)
@@ -432,9 +432,10 @@ class MainSlider {
                         
                         this.resetContainer()
                         if (this.isTheLast(parseInt(e.target.dataset.index))) {
-                            console.log('ostatnia kropka');
+                            // console.log('ostatnia kropka');
                         //    this.indexOfShowedSlider=this.controlPanelElements.length-1
                             this.lastElementWasClicked=true
+                            this.fillEmptySpace()
                         
                            
                         }
@@ -590,7 +591,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
     setInterval = () => {
         this.intervalForSlider = setInterval(() => {
-            console.log('odpalam interval');
+            // console.log('odpalam interval');
             this.intervalUsed = true;
             if (this.animation === "fade") {
                 this.increaseIndex();
@@ -820,19 +821,17 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     }
 
     fillEmptySpace = () => {
-
-        const itemsToAppend = []
-
-        this.sliderElements.forEach((sliderElement, index) => {
-            if (index < this.amountOfVisibleElements) {
-                itemsToAppend.push(sliderElement.cloneNode(true))
-            }
-
-        })
-        itemsToAppend.forEach(itemToAppend => {
-            this.slider.appendChild(itemToAppend)
-        })
-
+        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+        const itemsToAppend=[]
+      const numberOfItemsToAppend=this.amountOfVisibleElements-(this.sliderElements.length%this.amountOfVisibleElements)
+    //   console.log(numberOfItemsToAppend)
+      for (let index = 0; index < numberOfItemsToAppend; index++) {
+          itemsToAppend.push(this.sliderElements[index].cloneNode(true))
+          
+      }
+      itemsToAppend.forEach(itemToAppend=>{
+          this.slider.appendChild(itemToAppend)
+      })
 
     }
     delateCopy = () => {
@@ -947,13 +946,21 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
 
 
-checkWhichDotNeedToBeActive=(way)=>{
+checkWhichDotNeedToBeActive=(way,index=null)=>{
     if (way==="left") {
         const searchingDotWithIndex=parseInt(this.sliderElements[0].dataset.group)
-        console.log(searchingDotWithIndex);
+        // console.log(searchingDotWithIndex);
         this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
         this.removeActiveForAnItems(this.sliderElements)
         this.addActiveForAnItem(this.sliderElements[0])
+        // console.log(this.sliderElements[0].textContent);
+        return
+    }
+    if (way==="dot") {
+        const activeElement=this.slider.querySelector(`[data-group="${index}"]`)
+       
+        this.removeActiveForAnItems(this.sliderElements)
+        this.addActiveForAnItem(activeElement)
     }
 }
 
@@ -961,13 +968,51 @@ checkWhichDotNeedToBeActive=(way)=>{
     moveIntoNextSlide = () => {
        
         if (this.lastElementWasClicked) {
-           this.addTransition(true)
-            this.slider.style.transform = `translateX(0px)`
-            this.lastElementWasClicked=false
-            this.indexOfShowedSlider=0
-            this.changeValueOfVariables()
+            const numberOfItemsToDelate= this.amountOfVisibleElements-(this.startingSliderElements.length%this.amountOfVisibleElements)
+         
+         
+        // this.sliderElements.forEach(x=>{
+        //     console.log(x.textContent);
+        // })
 
-            return
+
+        this.sliderElements.forEach((sliderElement, index) => {
+            if (index >= numberOfItemsToDelate) {
+                
+                // console.log(sliderElement.textContent + "  kopiuje");
+                this.elementsToCopy.push(sliderElement.cloneNode(true))
+
+            }
+            this.elementsToCopy.forEach(elementToCopy => {
+                this.slider.appendChild(elementToCopy)
+                
+            })
+    
+            this.elementsToCopy = []
+          
+        })
+           
+        //     const itemsToDelate=[]
+        //     console.log(numberOfItemsToDelate);
+
+        //     for (let index = 0; index < numberOfItemsToDelate; index++) {
+        //         itemsToDelate.push(this.startingSliderElements[index])
+                
+        //     }
+
+        //  this.sliderElements.forEach((element,index)=>{
+        //      if (index<numberOfItemsToDelate) {
+        //          this.slider.removeChild(this.sliderElements[index])
+        //      }
+        //  })
+
+       
+           
+
+
+
+
+         
         }
         this.addTransition(true)
         this.increseDotIndex()
@@ -995,6 +1040,51 @@ checkWhichDotNeedToBeActive=(way)=>{
            
             this.indexOfShowedSlider=0
            this.checkWhichDotNeedToBeActive("left")
+           if (this.lastElementWasClicked) {
+               this.lastElementWasClicked=false
+            //    this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+               const numberOfItemsToDelate=this.amountOfVisibleElements-(this.startingSliderElements.length%this.amountOfVisibleElements)
+            //     for (let index = 0; index < numberOfItemsToDelate; index++) {
+            //         console.log(this.sliderElements[this.sliderElements.length-1-index].textContent +"lalalalalalal");
+                    
+            //         this.slider.removeChild(this.sliderElements[this.sliderElements.length-1-index])
+            //     }
+       
+            //     this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+
+            const newSliders=[]
+            const lastSlides=[]
+            
+            this.slider.innerHTML=""
+            this.startingSliderElements.forEach((sliderElement,index)=>{
+                if (index>=numberOfItemsToDelate) {
+                    newSliders.push(sliderElement)
+                }
+
+
+            })
+
+            this.startingSliderElements.forEach((sliderElement,index)=>{
+                if (index<numberOfItemsToDelate) {
+                    lastSlides.push(sliderElement)
+                }
+
+
+            })
+
+            newSliders.forEach(slide=>{
+                this.slider.appendChild(slide)
+            })
+
+            lastSlides.forEach(slide=>{
+                this.slider.appendChild(slide)
+            })
+            this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+
+            this.checkWhichDotNeedToBeActive("left")
+           
+                
+           }
 
         }, this.transition * 1000)
         
@@ -1076,7 +1166,7 @@ checkWhichDotNeedToBeActive=(way)=>{
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.amountOfVisibleElements*this.indexOfShowedSlider) {
                     
-                    console.log(sliderElement.textContent + "  kopiuje");
+                    // console.log(sliderElement.textContent + "  kopiuje");
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
     
                 }
@@ -1117,7 +1207,7 @@ checkWhichDotNeedToBeActive=(way)=>{
         this.sliderElements.forEach((sliderElement, index) => {
             if (index < this.amountOfVisibleElements*this.indexOfShowedSlider) {
                
-                console.log(sliderElement.textContent + "  usuwam");
+                // console.log(sliderElement.textContent + "  usuwam");
                 this.slider.removeChild(sliderElement)
 
             }
