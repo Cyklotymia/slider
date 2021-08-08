@@ -92,7 +92,9 @@ class MainSlider {
     initSlider = () => {
         if (this.controlPanel) {
             this.checkAmountOfElements()
+            
             this.createControlPanel(this.amountOfVisibleElements)
+            this.groupSliderElements()
             window.addEventListener('resize', () => {
                 this.checkAmountOfElements()
             })
@@ -218,7 +220,22 @@ class MainSlider {
 
     //////////// METODY KONTROLUJACE DZIALANIE DANEGO OBIEKTU
 
-
+ groupSliderElements=()=>{
+    if (this.amountOfVisibleElements>1) {
+        let numberOfGroup=0
+        let increase=0
+        this.sliderElements.forEach((sliderElement,index)=>{
+             if(increase>=this.amountOfVisibleElements){
+                 numberOfGroup+=1
+                 increase=0
+             }
+       increase++  
+       this.sliderElements[index].dataset.group=numberOfGroup
+         })
+            
+    }
+ }
+ 
     hiddenControl = (elementToHide) => {
         this.section.addEventListener("mouseleave", (e) => {
             elementToHide.classList.remove("active")
@@ -930,10 +947,17 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 
 
 
-
+checkWhichDotNeedToBeActive=(way)=>{
+    if (way==="left") {
+        const searchingDotWithIndex=parseInt(this.sliderElements[0].dataset.group)
+        console.log(searchingDotWithIndex);
+        this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
+    }
+}
 
 
     moveIntoNextSlide = () => {
+       
         if (this.lastElementWasClicked) {
            this.addTransition(true)
             this.slider.style.transform = `translateX(0px)`
@@ -968,7 +992,7 @@ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
            
            
             this.indexOfShowedSlider=0
-
+           this.checkWhichDotNeedToBeActive("left")
 
         }, this.transition * 1000)
         
