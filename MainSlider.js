@@ -952,6 +952,8 @@ checkWhichDotNeedToBeActive=(way)=>{
         const searchingDotWithIndex=parseInt(this.sliderElements[0].dataset.group)
         console.log(searchingDotWithIndex);
         this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
+        this.removeActiveForAnItems(this.sliderElements)
+        this.addActiveForAnItem(this.sliderElements[0])
     }
 }
 

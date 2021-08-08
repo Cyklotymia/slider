@@ -32,7 +32,9 @@
 }
 
 
-
+.slider__content.active,.slider__content2.active,.slider__content3.active,.slider__content4.active{
+    border-color: red;
+}
 
 
 .slider__content--f{
