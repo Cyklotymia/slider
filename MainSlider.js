@@ -51,6 +51,7 @@ class MainSlider {
         ////
         this.remaindMeLastIndex = this.indexOfShowedSlider // zapamietuje ostatni index
         this.elementsToCopy = []
+        this.dotClicked=false
         /// poczatkowe funcje inicjalizujace slider
         this.readIndex(); // pobranie staryujacego indexu
         this.getVariables(); // przypisuje wartości do w.w elementow
@@ -221,7 +222,7 @@ class MainSlider {
     //////////// METODY KONTROLUJACE DZIALANIE DANEGO OBIEKTU
 
  groupSliderElements=()=>{
-    if (this.amountOfVisibleElements>1) {
+    
         let numberOfGroup=0
         let increase=0
         this.sliderElements.forEach((sliderElement,index)=>{
@@ -233,7 +234,7 @@ class MainSlider {
        this.sliderElements[index].dataset.group=numberOfGroup
          })
             
-    }
+    
  }
  
     hiddenControl = (elementToHide) => {
@@ -415,8 +416,8 @@ class MainSlider {
     /// tworzenie panelu z kropkami
     createControlPanel = (numberOfDots = null) => {
         let indexForDot = -1
-
-
+        
+        
         this.sliderElements.forEach((sliderElement, index) => {
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
@@ -427,17 +428,23 @@ class MainSlider {
                     this.indexManualyChanged = true
                     this.removeActiveForAnItems(this.controlPanelElements)
                     this.addActiveForAnItem(e.target)
-                    if (this.amountOfVisibleElements>1) {
-                        
+                    if (this.dotClicked && this.amountOfVisibleElements ===1) {
+                        console.log('kolejny klik');
+                        this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
+                        return
+                    }
+                    this.dotClicked=true
+                    if (this.amountOfVisibleElements>1 && this.sliderElements.length%this.amountOfVisibleElements) {
+                       
                         
                         this.resetContainer()
                         if (this.isTheLast(parseInt(e.target.dataset.index))) {
                             // console.log('ostatnia kropka');
-                        //    this.indexOfShowedSlider=this.controlPanelElements.length-1
+                            //    this.indexOfShowedSlider=this.controlPanelElements.length-1
                             this.lastElementWasClicked=true
                             this.fillEmptySpace()
-                        
-                           
+                            
+                            
                         }
                         this.fadeElements(parseInt(e.target.dataset.index))
                         
@@ -447,6 +454,7 @@ class MainSlider {
                     this.changeIndexByClickOnDot(e)
                     if (this.animation === "fade") {
                         this.removeActiveForAnItems(this.sliderElements)
+                        
                         this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
                     }
                     if(this.animation === "horizontal100"||this.animation === "horizontal100-s"){
@@ -950,6 +958,7 @@ checkWhichDotNeedToBeActive=(way,index=null)=>{
     if (way==="left") {
         const searchingDotWithIndex=parseInt(this.sliderElements[0].dataset.group)
         // console.log(searchingDotWithIndex);
+       
         this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
         this.removeActiveForAnItems(this.sliderElements)
         this.addActiveForAnItem(this.sliderElements[0])
