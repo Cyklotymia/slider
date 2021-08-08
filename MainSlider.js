@@ -433,7 +433,7 @@ class MainSlider {
                     if (this.amountOfVisibleElements>1 && this.sliderElements.length%this.amountOfVisibleElements) {
                         if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
                             // this.resetContainer()
-                            console.log('ostatniaale kliknieta ktorys raz');
+                          
                             this.lastElementWasClicked=true
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.fillEmptySpace()
@@ -441,7 +441,7 @@ class MainSlider {
                             return
                         }
                         if (this.dotClicked) {
-                            console.log('kolejny klik');
+                            
                             console.log(this.indexOfLastActiveDot);
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.indexOfLastActiveDot=parseInt(e.target.dataset.index)
@@ -451,8 +451,7 @@ class MainSlider {
                         
                         this.resetContainer()
                         if (this.isTheLast(parseInt(e.target.dataset.index))) {
-                            // console.log('ostatnia kropka');
-                            //    this.indexOfShowedSlider=this.controlPanelElements.length-1
+                       
                             this.lastElementWasClicked=true
                             this.fillEmptySpace()
                             
@@ -508,7 +507,27 @@ this.controlPanelElements.forEach(controlPanelElement=>{
 
     
     moveIntoSlideWithIndex=(index)=>{
-this.resetContainer()
+        console.log(index != 4);
+       
+        if (index===this.controlPanelElements.length-1) {
+            this.addTransition(false)
+
+this.indexOfShowedSlider=index
+this.slider.style.transform=`translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
+
+
+setTimeout(()=>{
+    this.addTransition(true)
+    this.slider.style.transform=`translateX(-${index*this.widthOfVisibleElement}px)`
+},100)
+this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+    this.indexOfLastActiveDot=index
+    return
+        }
+        if (this.indexOfLastActiveDot!=this.controlPanelElements.length-1  ) {
+            console.log('reset');
+             this.resetContainer()
+         }
 this.addTransition(false)
 
 this.indexOfShowedSlider=index
@@ -522,6 +541,11 @@ setTimeout(()=>{
 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     this.indexOfLastActiveDot=index
     }
+
+
+
+
+
     /// resetuje caly container w ktorym sa slidy i nadaje je od nowa tak jak byly na poczatku
     resetContainer = () => {
         this.slider.innerHTML = ""
