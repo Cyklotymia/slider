@@ -1185,16 +1185,20 @@ class MainSlider {
 
 
     moveIntoPrevSlide = () => {
-
+this.dotClicked = false
         this.copyElementsForLeft()
         this.addTransition(false)
         this.slider.style.transform = `translateX(-${this.widthOfVisibleElement}px)`
         this.removeCloneElementsForLeft()
+        this.changeValueOfVariables()
+        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         setTimeout(() => {
             this.addTransition(true)
             this.slider.style.transform = `translateX(0px)`
             this.indexOfShowedSlider -= 1
             this.repairIndex()
+            this.checkWhichDotNeedToBeActive("left")
+            this.indexOfShowedSlider=0
 
         }, 100)
     }
