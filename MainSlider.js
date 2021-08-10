@@ -135,6 +135,7 @@ class MainSlider {
                         this.moveIntoPrevSlide()
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
+                           
                             this.removeActiveForAnItems(this.controlPanelElements)
 
                         }
@@ -163,6 +164,7 @@ class MainSlider {
                         this.moveIntoNextSlide()
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
+                          
                             this.removeActiveForAnItems(this.controlPanelElements)
 
                         }
@@ -427,6 +429,7 @@ class MainSlider {
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
+                   
                     this.changeValueOfVariables()
                     this.removeActiveForAnItems(this.sliderElements)
                     this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
@@ -437,7 +440,9 @@ class MainSlider {
 
 
                     if (this.amountOfVisibleElements > 1 && this.sliderElements.length % this.amountOfVisibleElements) {
+                       
                         if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
+                           
                             // this.resetContainer()
 
                             this.lastElementWasClicked = true
@@ -447,7 +452,7 @@ class MainSlider {
                             return
                         }
                         if (this.dotClicked) {
-
+                            clg
                             console.log(this.indexOfLastActiveDot);
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
@@ -607,6 +612,28 @@ class MainSlider {
 
 
         this.controlPanelElements[this.indexOfLastActiveDot].classList.add("active")
+    }
+
+    reduceDotIndex=()=>{
+        this.controlPanelElements.forEach((controlPanelElement, index) => {
+            if (controlPanelElement.classList.contains("active")) {
+                this.indexOfLastActiveDot = index - 1
+               
+            }
+
+        })
+        this.controlPanelElements.forEach(controlPanelElement => {
+            controlPanelElement.classList.remove("active")
+
+        })
+
+        this.indexOfLastActiveDot = this.indexOfLastActiveDot > this.controlPanelElements.length - 1 ? 0 : this.indexOfLastActiveDot
+        this.indexOfLastActiveDot = this.indexOfLastActiveDot < 0 ? this.controlPanelElements.length - 1 : this.indexOfLastActiveDot
+
+
+
+        this.controlPanelElements[this.indexOfLastActiveDot].classList.add("active")
+        console.log(this.controlPanelElements[this.indexOfLastActiveDot]);
     }
     shouldBeClear = (variable) => {
 
@@ -1032,11 +1059,6 @@ class MainSlider {
             const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
 
 
-            // this.sliderElements.forEach(x=>{
-            //     console.log(x.textContent);
-            // })
-
-
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index >= numberOfItemsToDelate) {
 
@@ -1053,27 +1075,7 @@ class MainSlider {
 
             })
 
-            //     const itemsToDelate=[]
-            //     console.log(numberOfItemsToDelate);
-
-            //     for (let index = 0; index < numberOfItemsToDelate; index++) {
-            //         itemsToDelate.push(this.startingSliderElements[index])
-
-            //     }
-
-            //  this.sliderElements.forEach((element,index)=>{
-            //      if (index<numberOfItemsToDelate) {
-            //          this.slider.removeChild(this.sliderElements[index])
-            //      }
-            //  })
-
-
-
-
-
-
-
-
+        
         }
         this.addTransition(true)
         this.increseDotIndex()
@@ -1085,7 +1087,7 @@ class MainSlider {
 
 
 
-        this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*this.sliderElements.lenght}px)`
+
 
 
         this.copyElementsForRight()
@@ -1184,29 +1186,77 @@ class MainSlider {
 
 
 
-    moveIntoPrevSlide = () => {
-this.dotClicked = false
-        this.copyElementsForLeft()
-        this.addTransition(false)
-        this.slider.style.transform = `translateX(-${this.widthOfVisibleElement}px)`
-        this.removeCloneElementsForLeft()
-        this.changeValueOfVariables()
-        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-        setTimeout(() => {
-            this.addTransition(true)
-            this.slider.style.transform = `translateX(0px)`
-            this.indexOfShowedSlider -= 1
-            this.repairIndex()
-            this.checkWhichDotNeedToBeActive("left")
-            this.indexOfShowedSlider=0
+//     moveIntoPrevSlide = () => {
+// this.dotClicked = false
 
-        }, 100)
-    }
+
+// this.copyElementsForLeft()
+// this.addTransition(false)
+// if (this.lastElementWasClicked) {
+//     // this.slider.style.transform = `translateX(0px)`
+//     this.slider.style.transform = `translateX(-${this.widthOfVisibleElement}px)`
+  
+
+// }else{
+
+//     this.slider.style.transform = `translateX(-${this.widthOfVisibleElement}px)`
+// }
+//         this.removeCloneElementsForLeft()
+//         this.changeValueOfVariables()
+//         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+//         setTimeout(() => {
+//             this.addTransition(true)
+//             if (this.lastElementWasClicked) {
+                
+//                 // this.slider.style.transform = `translateX(${this.widthOfVisibleElement}px)`
+//                 this.slider.style.transform = `translateX(0px)`
+                
+//             }else{
+//                 this.slider.style.transform = `translateX(0px)`
+            
+//             }
+            
+//             this.indexOfShowedSlider -= 1
+//             this.repairIndex()
+//             this.checkWhichDotNeedToBeActive("left")
+//             this.indexOfShowedSlider=0
+
+//         }, 100)
+//     }
+
+
+
+
+
+
+moveIntoPrevSlide = () => {
+    this.dotClicked = false
+    this.addTransition(false)
+ this.reduceDotIndex()
+ this.copyElementsForLeft()
+
+ this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
+
+ this.removeCloneElementsForLeft()
+ setTimeout(()=>{
+     this.addTransition(true)
+     this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
+    
+    this.checkWhichDotNeedToBeActive("left")
+ }, this.transition * 100)
+ this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+
+}
+
 
 
     copyElementsForLeft = () => {
+        
         this.sliderElements.forEach((sliderElement, index) => {
-            if (index > this.sliderElements.length - 1 - this.amountOfVisibleElements) {
+            if (index >= this.startingSliderElements.length -this.amountOfVisibleElements) {
+             
+
+                console.log(sliderElement.textContent + "  kopiuje");
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
 
             }
@@ -1214,7 +1264,9 @@ this.dotClicked = false
         this.elementsToCopy.reverse()
         this.elementsToCopy.forEach(elementToCopy => {
             this.slider.prepend(elementToCopy)
+
         })
+
         this.elementsToCopy = []
 
     }
@@ -1231,7 +1283,7 @@ this.dotClicked = false
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
 
-                    // console.log(sliderElement.textContent + "  kopiuje");
+                    console.log(sliderElement.textContent + "  kopiuje");
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
 
                 }
@@ -1273,7 +1325,7 @@ this.dotClicked = false
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
 
-                    // console.log(sliderElement.textContent + "  usuwam");
+                    console.log(sliderElement.textContent + "  usuwam");
                     this.slider.removeChild(sliderElement)
 
                 }
@@ -1281,7 +1333,7 @@ this.dotClicked = false
         } else {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.indexOfShowedSlider) {
-
+                    console.log(sliderElement.textContent + "dodaje");
 
                     this.slider.removeChild(sliderElement)
 
@@ -1293,13 +1345,26 @@ this.dotClicked = false
     }
     removeCloneElementsForLeft = () => {
         this.sliderElements.forEach((sliderElement, index) => {
-            if (index > this.sliderElements.length - 1 - this.amountOfVisibleElements) {
-
+            if (index >= this.startingSliderElements.length -this.amountOfVisibleElements) {
+                console.log(sliderElement.textContent + "usuwam");
                 this.slider.removeChild(sliderElement)
 
             }
         })
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+
+        this.sliderElements.forEach(x=>{
+            console.log(x.textContent);
+        })
+
+
+
+
+
+
+
+
+
     }
 
     readyToClick = () => {
