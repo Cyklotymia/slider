@@ -113,6 +113,8 @@ class MainSlider {
                 if (this.animation === "fade") {
                     // zmniejsza index -1
                     this.reduceIndex();
+                    this.reduceDotIndex()
+                    
                 }
                 // jeżeli jest slider horyzontalny
                 if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
@@ -289,7 +291,8 @@ class MainSlider {
                     this.increaseIndex()
 
                 } else {
-                    this.reduceIndex()
+                    this.reduceIndex();
+                    this.reduceDotIndex()
                 }
             }
 
@@ -668,6 +671,7 @@ class MainSlider {
     increaseIndex = () => {
         this.indexOfShowedSlider += 1
         this.changeSlide()
+        this.increseDotIndex()
     }
 
 
@@ -961,7 +965,7 @@ class MainSlider {
 
         /// zmienia kropke
         // this.changeActiveControlElement()
-        this.increseDotIndex()
+        
 
     }
 
