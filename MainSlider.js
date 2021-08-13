@@ -1109,7 +1109,7 @@ console.log('faduje');
             // })
         
         }
-        this.dotClicked = false
+        
         this.addTransition(true)
         this.increseDotIndex()
 
@@ -1136,7 +1136,8 @@ console.log('faduje');
 
             this.indexOfShowedSlider = 0
             this.checkWhichDotNeedToBeActive("left")
-            if (this.lastElementWasClicked) {
+            if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[0].classList.contains("active")) {
+                console.log('object2');
                 this.lastElementWasClicked = false
               
                 const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
@@ -1174,6 +1175,7 @@ console.log('faduje');
 
 
             }
+            this.dotClicked = false
 
         }, this.transition * 1000)
 
