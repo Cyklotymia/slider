@@ -10,4 +10,4 @@ const slider3= new MainSlider("container3")
 // const slider4= new MainSlider("container4")
  
 })
-//////////// ostatnia kropka do poprawy dzialanie !!!!!!!! plus zmiana kropek z active 
+//////////// klik ostatnia kropka pote inna kropka potem ostatnia i w prawo to nowa funkcja i chuj

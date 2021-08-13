@@ -1074,8 +1074,9 @@ console.log('faduje');
 
 
     moveIntoNextSlide = () => {
-        this.dotClicked = false
-        if (this.lastElementWasClicked) {
+       
+        if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[this.controlPanelElements.length-1].classList.contains("active")) {
+            console.log('object');
             // wyznaczenie ktory sie powtarza
             const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
             /// 4 - (7 % 4)= 4 - 3 =1
@@ -1108,6 +1109,7 @@ console.log('faduje');
             // })
         
         }
+        this.dotClicked = false
         this.addTransition(true)
         this.increseDotIndex()
 
