@@ -432,10 +432,10 @@ class MainSlider {
                    
                     this.changeValueOfVariables()
                     this.removeActiveForAnItems(this.sliderElements)
-                    this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
+                    this.removeActiveForAnItems(this.controlPanelElements)
+                    // this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                     this.lastElementWasClicked = false
                     this.indexManualyChanged = true
-                    this.removeActiveForAnItems(this.controlPanelElements)
                     this.addActiveForAnItem(e.target)
 
 
@@ -448,7 +448,7 @@ class MainSlider {
                             this.lastElementWasClicked = true
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.fillEmptySpace()
-
+                            this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                             return
                         }
                         if (this.dotClicked) {
@@ -456,7 +456,7 @@ class MainSlider {
                             // console.log(this.indexOfLastActiveDot);
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
-
+                            this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                             return
                         }
 
@@ -471,6 +471,7 @@ class MainSlider {
                         this.fadeElements(parseInt(e.target.dataset.index))
                         this.dotClicked = true
                         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
+                        this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                         return
                     }
                     this.dotClicked = true
@@ -486,7 +487,7 @@ class MainSlider {
                         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
                     }
 
-
+                    this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
 
                 })
 
@@ -1046,7 +1047,7 @@ class MainSlider {
         }
         if (way === "dot") {
             const activeElement = this.slider.querySelector(`[data-group="${index}"]`)
-
+            console.log(activeElement.textContent);
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(activeElement)
         }
