@@ -118,19 +118,7 @@ class MainSlider {
                 }
                 // jeżeli jest slider horyzontalny
                 if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
-                    // zmiana że powinien być animowany
-                    // this.shouldBeAnimated = true
-                    // //przypisanie intervalu czy byl uzyty
-                    // this.changeValueOfVariables()
-
-                    // // obniza index
-                    // this.reduceIndex()
-                    // // dodaje transition
-                    // // this.addTransition(this.slider,this.transition)
-                    // /
-                    // // this.slider.style.transition = "0.2s"
-                    // //pokazuje slider z indexem
-                    // this.showSliderWithIndex()
+                   
                     if (this.canIClick) {
 
                         this.canIClick = false
@@ -301,23 +289,32 @@ class MainSlider {
 
             if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
                 this.indexManualyChanged = true
+                clearInterval(this.intervalForSlider)
                 if (touchStart > touchEnd) {
                     if (this.canIClick) {
                         this.canIClick = false
                         this.moveIntoNextSlide()
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
+                          
                             this.removeActiveForAnItems(this.controlPanelElements)
 
                         }
                     }
+
                 
                 } else {
-                    this.changeValueOfVariables()
-                    this.reduceIndex()
-                    this.shouldBeAnimated = true
-                    this.addTransition(true)
-                    this.showSliderWithIndex()
+                    if (this.canIClick) {
+
+                        this.canIClick = false
+                        this.moveIntoPrevSlide()
+                        this.readyToClick()
+                        if (this.sliderElements.length % this.amountOfVisibleElements) {
+                           
+                            this.removeActiveForAnItems(this.controlPanelElements)
+
+                        }
+                    }
                 }
             }
             this.setInterval()
