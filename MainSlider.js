@@ -1076,7 +1076,7 @@ console.log('faduje');
     moveIntoNextSlide = () => {
        
         if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[this.controlPanelElements.length-1].classList.contains("active")) {
-            console.log('object');
+          
             // wyznaczenie ktory sie powtarza
             const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
             /// 4 - (7 % 4)= 4 - 3 =1
@@ -1194,9 +1194,9 @@ console.log('faduje');
 
 
 moveIntoPrevSlide = () => {
-    this.dotClicked = false
-    if (this.lastElementWasClicked) {
-      
+  
+    if (this.lastElementWasClicked ) {
+       
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
        
         this.addTransition(true)
@@ -1208,13 +1208,20 @@ this.resetContainer()
 // this.reduceDotIndex()
 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
 this.indexOfShowedSlider-=1
-this.checkWhichDotNeedToBeActive("right")
+// this.checkWhichDotNeedToBeActive("right")
+this.dotClicked = false
 },this.transition*1000)
 return
     
     }
+    if (this.dotClicked && this.controlPanelElements[0].classList.contains("active")) {
+        console.log('wchodze');
+       this.resetContainer()
+       this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+    }
+    this.dotClicked = false
     this.addTransition(false)
-//  this.reduceDotIndex()
+
  this.copyElementsForLeft()
 this.lastElementWasClicked=false
  this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
@@ -1384,7 +1391,6 @@ this.lastElementWasClicked=false
             sliderElement.dataset.index = index
         })
     }
-
 
 
 
