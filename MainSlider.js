@@ -569,7 +569,7 @@ class MainSlider {
 
 
     fadeElements = (index) => {
-
+console.log('faduje');
         this.addTransition(false)
 
         this.slider.style.transform = `translateX(-${index*this.widthOfVisibleElement}px)`
