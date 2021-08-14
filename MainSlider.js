@@ -440,7 +440,7 @@ class MainSlider {
 
 
                     if (this.amountOfVisibleElements > 1 && this.sliderElements.length % this.amountOfVisibleElements) {
-                       
+                      
                         if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
                            
                             // this.resetContainer()
@@ -481,10 +481,12 @@ class MainSlider {
 
                         this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
                     }
-                    if (this.amountOfVisibleElements===1) {
+                    if (this.amountOfVisibleElements===1 && this.animation!= "fade") {
+                       
                         this.resetContainer()
                         this.addTransition(false)
                         this.slider.style.transform = `translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
+                     
                         this.indexOfShowedSlider=parseInt(e.target.dataset.index)
                         setTimeout(()=>{
                             this.addTransition(true)
@@ -500,6 +502,7 @@ class MainSlider {
                         this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                         this.dotClicked = true
                         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
+                        
                     }
 
                     this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
@@ -1265,6 +1268,7 @@ this.lastElementWasClicked=false
  
 if (this.amountOfVisibleElements===1) {
     this.checkWhichDotNeedToBeActive("right")
+  
     
 }
  setTimeout(()=>{
@@ -1272,12 +1276,13 @@ if (this.amountOfVisibleElements===1) {
      if (this.amountOfVisibleElements>1) {
         this.checkWhichDotNeedToBeActive("right")
      }
-    
+     
     
         
    
  }, this.transition * 1000)
  this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+
 
 }
 
