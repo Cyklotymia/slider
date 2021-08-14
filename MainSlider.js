@@ -351,8 +351,21 @@ class MainSlider {
     /// odczytuje szerokosc pojedynczego slide
     readWidthOfVisibleElement = () => {
         window.addEventListener('resize', () => {
-
-
+            clearInterval(this.intervalForSlider);
+            this.controlPanel.innerHTML=""
+            this.createControlPanel(this.amountOfVisibleElements)
+            this.resetContainer()
+            this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+            // this.addTransition(false)
+            this.dotClicked=false
+            this.groupSliderElements()
+            this.slider.style.transform = `translateX(0px)`
+            this.removeActiveForAnItems(this.controlPanelElements)
+            this.removeActiveForAnItems(this.sliderElements)
+            this.addActiveForAnItem(this.controlPanelElements[0])
+            this.addActiveForAnItem(this.sliderElements[0])
+            this.indexOfShowedSlider=0
+            this.remaindMeLastIndex=0
             this.widthOfVisibleElement = this.slider.offsetWidth;
 
 
@@ -429,7 +442,11 @@ class MainSlider {
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
-                   
+                //    if (e.target) {
+                //        this.findElement(parseInt(e.target.dataset.index))
+                //        console.log('proba');
+                //     return
+                //    }
                     this.changeValueOfVariables()
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
@@ -1395,7 +1412,27 @@ this.lastElementWasClicked=false
 
 
 
+// findElement=(index)=>{
+//     const indexGroup=index
+//     this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+  
+//     let indexOfSearchingElement=null
+//     const widthOfSingleElement=this.widthOfVisibleElement/this.amountOfVisibleElements
+   
+//     this.sliderElements.forEach((sliderElement,index)=>{
+       
+//        if (parseInt(sliderElement.dataset.group)===indexGroup && index%this.amountOfVisibleElements===0 ) {
+//             console.log(sliderElement.textContent);
+//             indexOfSearchingElement=index
+//         }
+//     })
+//     this.addTransition(true)
+//     this.slider.style.transform=`translateX(-${widthOfSingleElement*indexOfSearchingElement}px)`
 
+    
+
+
+// }
 
 
 }
