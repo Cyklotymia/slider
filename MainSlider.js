@@ -120,10 +120,34 @@ class MainSlider {
         });
     };
 
+    resetSlider= ()=>{
+        clearInterval(this.intervalForSlider);
+        this.resetContainer()
+        this.removeActiveForAnItems(this.sliderElements)
+        this.addActiveForAnItem(this.sliderElements[0])
+        this.addTransition(true)
+        this.slider.style.transform = `translateX(0px)`
+
+        this.controlPanel.innerHTML=""
+        this.createControlPanel(this.amountOfVisibleElements)
+        this.removeActiveForAnItems(this.controlPanelElements)
+        this.addActiveForAnItem(this.controlPanelElements[0])
+
+        this.indexOfShowedSlider=0
+        this.indexOfLastActiveDot=0
+        this.remaindMeLastIndex=0
+       this.lastElementWasClicked=false
+        this.sliderElements=this.section.querySelectorAll(".js__MainSlider-element");
+       this.addDatasetForSliders()
+       this.groupSliderElements()
+
+    }
     //// metoda odpalająca funkcje zgodnie z wyzej ustalonymi zmiennymi
     initSlider = () => {
         window.addEventListener('resize', () => {
-            clearInterval(this.intervalForSlider);
+            this.resetSlider()
+    
+           
         })
         if (this.controlPanel) {
             this.checkAmountOfElements();
@@ -419,6 +443,7 @@ class MainSlider {
     }
     /// tworzenie panelu z kropkami
     createControlPanel = (numberOfDots = null) => {
+        console.log('robie kontrolpanel');
         let indexForDot = -1
         this.sliderElements.forEach((sliderElement, index) => {
             if (numberOfDots && index % numberOfDots === 0) {
@@ -435,6 +460,7 @@ class MainSlider {
                             this.lastElementWasClicked = true
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.fillEmptySpace()
+                            console.log('tu?');
                             this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                             return
                         }
@@ -585,7 +611,6 @@ class MainSlider {
                 const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
                 this.sliderElements.forEach((sliderElement, index) => {
                     if (index >= numberOfItemsToDelate) {
-                        console.log(sliderElement.textContent + "  kopiuje");
                         this.elementsToCopy.push(sliderElement.cloneNode(true))
                     }
                     this.elementsToCopy.forEach(elementToCopy => {
@@ -597,7 +622,6 @@ class MainSlider {
             }
         }
 
-
         this.addTransition(true)
         this.increseDotIndex()
 
@@ -605,30 +629,17 @@ class MainSlider {
 
         this.indexOfShowedSlider += 1
         this.changeValueOfVariables()
-
-
-
-
-
-
         this.copyElementsForRight()
-
         setTimeout(() => {
             this.removeCloneElementsForRight()
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-
             this.addTransition(false)
             this.slider.style.transform = `translateX(-${0}px)`
-
-
-
             this.indexOfShowedSlider = 0
             this.checkWhichDotNeedToBeActive("left")
             if (this.amountOfVisibleElements > 1) {
                 if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[0].classList.contains("active")) {
-                    console.log('object2');
                     this.lastElementWasClicked = false
-
                     const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
 
                     const newSliders = []
