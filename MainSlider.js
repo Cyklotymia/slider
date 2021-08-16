@@ -93,11 +93,9 @@ class MainSlider {
         this.sliderElements.forEach((sliderElement, index) => {
             if (sliderElement.classList.contains("active")) {
                 this.indexOfShowedSlider = index;
-
-            }
-        })
-
-    }
+            };
+        });
+    };
 
     /// metoda pobierająca początkowe zmienne  
     getVariables = () => {
@@ -112,16 +110,15 @@ class MainSlider {
         this.animation = this.slider.dataset.animate ?? null;
         this.widthOfVisibleElement = this.slider.offsetWidth;
         this.heightOfVisibleElement = this.section.offsetHeight;
-
-    }
+    };
 
 
     //// metoda dodająca każdemu sliderowi date index
     addDatasetForSliders = () => {
         this.sliderElements.forEach((sliderElement, index) => {
             sliderElement.dataset.index = index;
-        })
-    }
+        });
+    };
 
     //// metoda odpalająca funkcje zgodnie z wyzej ustalonymi zmiennymi
     initSlider = () => {
@@ -129,47 +126,36 @@ class MainSlider {
             clearInterval(this.intervalForSlider);
         })
         if (this.controlPanel) {
-            this.checkAmountOfElements()
-
+            this.checkAmountOfElements();
             this.createControlPanel(this.amountOfVisibleElements)
-            this.groupSliderElements()
+            this.groupSliderElements();
             window.addEventListener('resize', () => {
-                this.checkAmountOfElements()
+                this.checkAmountOfElements();
             })
-            this.addStartedActive()
-        }
-        /// strzałka w lewo
+            this.addStartedActive();
+        };
         if (this.arrowLeft) {
-            /// listener
             this.arrowLeft.addEventListener("click", () => {
-                // zmienia flage na true
                 this.indexManualyChanged = true;
-                // czyści interval zeby nie kolidował z przesuwaniem na przycisk
                 clearInterval(this.intervalForSlider);
-                // jeżeli opcja to fade slider
                 if (this.animation === "fade") {
-                    // zmniejsza index -1
                     this.reduceIndex();
-                    this.reduceDotIndex()
+                    this.reduceDotIndex();
 
                 }
                 // jeżeli jest slider horyzontalny
                 if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
-
                     if (this.canIClick) {
-
                         this.canIClick = false
                         this.moveIntoPrevSlide()
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
+                            this.removeActiveForAnItems(this.controlPanelElements);
+                        };
+                    };
+                };
 
-                            this.removeActiveForAnItems(this.controlPanelElements)
-
-                        }
-                    }
-                }
-
-            })
+            });
         }
         if (this.arrowRight) {
             this.arrowRight.addEventListener("click", () => {
@@ -615,19 +601,6 @@ class MainSlider {
 
 
 
-
- 
-
-
-
-
-
-
-
-
-
-  
-
     ////// METODY DLA INDEXU
 
     /// zwiększenie indexu elementu navigacji + zmienna indexOfLastActiveDot
@@ -745,17 +718,6 @@ class MainSlider {
 
         //dodaje active do elementu na podstawie indexu
         this.sliderElements[this.indexOfShowedSlider].classList.add("active")
-        if (this.animation === "horizontal100-s") {
-            this.sliderElements.forEach(sliderElement => {
-                sliderElement.classList.remove("active")
-            });
-
-        }
-
-
-        /// zmienia kropke
-        // this.changeActiveControlElement()
-
 
     }
     /// zmiana slidu w prawo ( dodanie odjecie slidow i przełożenie ich (append ))
@@ -1181,9 +1143,9 @@ class MainSlider {
 
 ///data-interval="milisekundy" => dla js__MainSlider czas co ile ma się zmieniać slide
 /// data-mobile=true => dla js__MainSlider rozpoznawanie touches 
-/// data-animate= "horizontal100" => dla js__MainSlider animacja przesuwanialewo prawo gdzie kazde zdjecie ma 100 width
+
 /// data-animate="fade" => dla js__MainSlider  jak maja slidy sie przenikac przez siebie
-/// data-animate="horizontal100-s" => dla js__MainSlider  jak jest kilka slidow na jednej stronie i ma sie zmieniac o 100% slide
+/// data-animate="horizontal" => dla js__MainSlider  jak slider jest lewo prawo
 
 
 /// horizontal NIE MOZE BYC NTH CHILD STYLOWANE BO BEDA SIE ZMIENIAC CHILDY 
