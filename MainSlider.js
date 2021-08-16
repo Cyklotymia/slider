@@ -141,10 +141,8 @@ class MainSlider {
                 if (this.animation === "fade") {
                     this.reduceIndex();
                     this.reduceDotIndex();
-
                 }
-                // jeżeli jest slider horyzontalny
-                if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
+                if (this.animation === "horizontal") {
                     if (this.canIClick) {
                         this.canIClick = false
                         this.moveIntoPrevSlide()
@@ -164,20 +162,15 @@ class MainSlider {
                 if (this.animation === "fade") {
                     this.increaseIndex()
                 }
-                if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
-                
-
+                if (this.animation === "horizontal") {
                     if (this.canIClick) {
                         this.canIClick = false
                         this.moveIntoNextSlide()
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
-
                             this.removeActiveForAnItems(this.controlPanelElements)
-
                         }
                     }
-
                 }
             })
         }
@@ -197,19 +190,12 @@ class MainSlider {
         if (this.touches) {
             this.controlTouches()
         }
-        if (this.animation === "horizontal100") {
+        if (this.animation === "horizontal") {
             this.readWidthOfVisibleElement()
-        }
-        if (this.animation === "horizontal100-s" || this.animation === "horizontal100") {
-            this.readWidthOfVisibleElement()
-
             this.addStartedActive();
-
-
         }
-        if (this.animation === "vertical100-s") {
+        if (this.animation === "vertical") {
             this.readHeightOfVisibleElement()
-
         }
     }
 
@@ -220,7 +206,6 @@ class MainSlider {
     
     //// metoda która grupuje elementy slidera (data-group)
     groupSliderElements = () => {
-
         let numberOfGroup = 0;
         let increase = 0;
         this.sliderElements.forEach((sliderElement, index) => {
@@ -231,71 +216,49 @@ class MainSlider {
             increase++;
             this.sliderElements[index].dataset.group = numberOfGroup;
         });
-
-
     }
     //////////// METODY KONTROLUJACE DZIALANIE DANEGO OBIEKTU
     
     
     hiddenControl = (elementToHide) => {
         this.section.addEventListener("mouseleave", (e) => {
-            elementToHide.classList.remove("active")
-            
+            elementToHide.classList.remove("active") 
         })
         this.section.addEventListener("mouseenter", (e) => {
-            elementToHide.classList.add("active")
-            
+            elementToHide.classList.add("active")       
         })
     }
     intervalControl = () => {
         this.section.addEventListener("mouseleave", (e) => {
-            this.setInterval();
-            
-            
+            this.setInterval();  
         })
         this.section.addEventListener("mouseenter", (e) => {
             clearInterval(this.intervalForSlider);
-            
         })
     }
     controlTouches = () => {
         let touchStart = null;
         let touchEnd = null;
-        
-        
-        
-        
-        
         this.slider.addEventListener("touchstart", (e) => {
             clearInterval(this.intervalForSlider)
             this.indexManualyChanged = true
             touchStart = e.touches[0].clientX
-            
         })
         this.slider.addEventListener("touchend", (e) => {
             if (e.target.closest(".js__MainSlider-arrow--right") || e.target.closest(".js__MainSlider-arrow--left") || e.target.closest(".js__MainSlider-control-element")) {
                 clearInterval(this.intervalForSlider)
-                
                 return
             }
-            
             clearInterval(this.intervalForSlider)
             if (this.animation === "fade") {
-                
                 if (touchStart > touchEnd) {
-                    
                     this.increaseIndex()
-                    
                 } else {
                     this.reduceIndex();
                     this.reduceDotIndex()
                 }
             }
-            
-            
-            
-            
-            if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
+            if (this.animation === "horizontal") {
                 this.indexManualyChanged = true
                 clearInterval(this.intervalForSlider)
                 if (touchStart > touchEnd) {
@@ -304,34 +267,25 @@ class MainSlider {
                         this.moveIntoNextSlide()
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
-                            
                             this.removeActiveForAnItems(this.controlPanelElements)
-                            
                         }
                     }
-                    
-                    
+
                 } else {
                     if (this.canIClick) {
-                        
                         this.canIClick = false
                         this.moveIntoPrevSlide()
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
-                            
                             this.removeActiveForAnItems(this.controlPanelElements)
-                            
                         }
                     }
                 }
             }
-            this.setInterval()
-            
+            this.setInterval()  
         })
         this.slider.addEventListener("touchmove", (e) => {
-
             touchEnd = e.touches[0].clientX
-            
         })
     }
     
@@ -354,22 +308,15 @@ class MainSlider {
     addTransition = (shouldIAdd) => {
         if (shouldIAdd) {
             this.slider.style.transition = `${this.transition}s`;
-            
-            
         } else {
             this.slider.style.transition = "none";
-            
-        }
-        
+        } 
     }
   
     /// odczytuje szerokosc widocznych sliderów *szerokosc kontenera overflow*
     readWidthOfVisibleElement = () => {
         window.addEventListener('resize', () => {
-
             this.widthOfVisibleElement = this.slider.offsetWidth;
-
-
         })
     }
 
@@ -378,22 +325,16 @@ class MainSlider {
         const style = this.sliderElements[0].currentStyle || window.getComputedStyle(this.sliderElements[0]);
         let lastAmountOfVisibleElements;
 
-        // this.slider.style.transform = "translateX(0)"
-
         const marginLeft = style.marginLeft
         const marginRight = style.marginRight
 
         lastAmountOfVisibleElements = this.amountOfVisibleElements === null ? Math.round(this.widthOfVisibleElement / (this.sliderElements[0].offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) + parseFloat(marginLeft.substr(0, marginLeft.length - 2)))) : this.amountOfVisibleElements
 
-
-
         this.amountOfVisibleElements = Math.round(this.widthOfVisibleElement / (this.sliderElements[0].offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) + parseFloat(marginLeft.substr(0, marginLeft.length - 2))))
 
         this.shouldBeClear(lastAmountOfVisibleElements)
 
-
-
-        if (this.animation === "vertical100-s") {
+        if (this.animation === "vertical") {
             this.slider.style.transform = "translateY(0)"
             const marginTop = style.marginTop
             const marginBottom = style.marginBottom
@@ -406,7 +347,6 @@ class MainSlider {
             this.amountOfVisibleElements = Math.round(this.heightOfVisibleElement / (this.sliderElements[0].offsetHeight + parseFloat(marginTop.substr(0, marginTop.length - 2)) + parseFloat(marginBottom.substr(0, marginBottom.length - 2))))
             this.shouldBeClear(lastAmountOfVisibleElements)
         }
-
     }
 
 
@@ -433,17 +373,13 @@ class MainSlider {
     checkWhichDotNeedToBeActive = (way, index = null) => {
         if (way === "left") {
             const searchingDotWithIndex = parseInt(this.sliderElements[0].dataset.group)
-            // console.log(searchingDotWithIndex);
-
             this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(this.sliderElements[0])
-            // console.log(this.sliderElements[0].textContent);
             return
         }
         if (way === "dot") {
             const activeElement = this.slider.querySelector(`[data-group="${index}"]`)
-
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(activeElement)
         }
@@ -455,7 +391,6 @@ class MainSlider {
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
                     let activeSlide = this.sliderElements[index - this.amountOfVisibleElements]
-                   
                     if (!activeSlide) {
                         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                         activeSlide = this.sliderElements[this.sliderElements.length - 1]
@@ -463,12 +398,7 @@ class MainSlider {
                     }
                     this.addActiveForAnItem(activeSlide)
                     const activeDot = parseInt(activeSlide.dataset.group)
-
                     this.addActiveForAnItem(this.controlPanelElements[activeDot])
-
-
-
-
                 }
             })
         }
@@ -482,39 +412,26 @@ class MainSlider {
         const element = document.createElement(item)
         element.classList.add(classForItem)
         if (dataset || dataset === 0) {
-
             element.dataset.index = dataset
         }
         container.appendChild(element)
-
         return element
-
     }
     /// tworzenie panelu z kropkami
     createControlPanel = (numberOfDots = null) => {
         let indexForDot = -1
-
-
         this.sliderElements.forEach((sliderElement, index) => {
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
-
                     this.changeValueOfVariables()
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
-                    // this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                     this.lastElementWasClicked = false
                     this.indexManualyChanged = true
                     this.addActiveForAnItem(e.target)
-
-
                     if (this.amountOfVisibleElements > 1 && this.sliderElements.length % this.amountOfVisibleElements) {
-
                         if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
-
-                            // this.resetContainer()
-
                             this.lastElementWasClicked = true
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.fillEmptySpace()
@@ -522,21 +439,15 @@ class MainSlider {
                             return
                         }
                         if (this.dotClicked) {
-
-                        
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
                             this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                             return
                         }
-
                         this.resetContainer()
                         if (this.isTheLast(parseInt(e.target.dataset.index))) {
-
                             this.lastElementWasClicked = true
                             this.fillEmptySpace()
-
-
                         }
                         this.fadeElements(parseInt(e.target.dataset.index))
                         this.dotClicked = true
@@ -548,15 +459,12 @@ class MainSlider {
                     this.changeIndexByClickOnDot(e)
                     if (this.animation === "fade") {
                         this.removeActiveForAnItems(this.sliderElements)
-
                         this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
                     }
                     if (this.amountOfVisibleElements === 1 && this.animation != "fade") {
-
                         this.resetContainer()
                         this.addTransition(false)
                         this.slider.style.transform = `translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
-
                         this.indexOfShowedSlider = parseInt(e.target.dataset.index)
                         setTimeout(() => {
                             this.addTransition(true)
@@ -566,28 +474,17 @@ class MainSlider {
                         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
                         this.sliderElements = this.startingSliderElements
                         return
-
                     }
-                    if (this.animation === "horizontal100" || this.animation === "horizontal100-s") {
+                    if (this.animation === "horizontal") {
                         this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                         this.dotClicked = true
                         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
-
                     }
-
                     this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
-
                 })
-
-
-
             }
-
         })
-
         this.controlPanelElements = this.controlPanel.querySelectorAll(".js__MainSlider-control-element")
-
-
     }
 
      /// resetuje caly container w ktorym sa slidy i nadaje je od nowa tak jak byly na poczatku
@@ -598,30 +495,20 @@ class MainSlider {
         })
     }
 
-
-
-
     ////// METODY DLA INDEXU
 
     /// zwiększenie indexu elementu navigacji + zmienna indexOfLastActiveDot
     increseDotIndex = () => {
-
         this.controlPanelElements.forEach((controlPanelElement, index) => {
             if (controlPanelElement.classList.contains("active")) {
                 this.indexOfLastActiveDot = index + 1
             }
-
         })
         this.controlPanelElements.forEach(controlPanelElement => {
             controlPanelElement.classList.remove("active")
-
         })
-
         this.indexOfLastActiveDot = this.indexOfLastActiveDot > this.controlPanelElements.length - 1 ? 0 : this.indexOfLastActiveDot
         this.indexOfLastActiveDot = this.indexOfLastActiveDot < 0 ? this.controlPanelElements.length - 1 : this.indexOfLastActiveDot
-
-
-
         this.controlPanelElements[this.indexOfLastActiveDot].classList.add("active")
     }
     /// zmniejszenie indexu elementu nawigazji + zmienna indexOfLastActiveDot
@@ -629,35 +516,25 @@ class MainSlider {
         this.controlPanelElements.forEach((controlPanelElement, index) => {
             if (controlPanelElement.classList.contains("active")) {
                 this.indexOfLastActiveDot = index - 1
-
             }
-
         })
         this.controlPanelElements.forEach(controlPanelElement => {
             controlPanelElement.classList.remove("active")
-
         })
-
         this.indexOfLastActiveDot = this.indexOfLastActiveDot > this.controlPanelElements.length - 1 ? 0 : this.indexOfLastActiveDot
         this.indexOfLastActiveDot = this.indexOfLastActiveDot < 0 ? this.controlPanelElements.length - 1 : this.indexOfLastActiveDot
-
-
-
         this.controlPanelElements[this.indexOfLastActiveDot].classList.add("active")
-        // console.log(this.controlPanelElements[this.indexOfLastActiveDot]);
     }
 
     /// dla IndexOfShowedSlider => kontrola zmiennej
     repairIndex = () => {
-
-        if (this.animation === "horizontal100-s") {
+/////////////////////////////??????????????????????
+        if (this.animation === "horizontal") {
             this.indexOfShowedSlider = this.indexOfShowedSlider > this.controlPanelElements.length - 1 ? 0 : this.indexOfShowedSlider
             this.indexOfShowedSlider = this.indexOfShowedSlider < 0 ? this.controlPanelElements.length - 1 : this.indexOfShowedSlider
-
         }
         this.indexOfShowedSlider = this.indexOfShowedSlider > this.sliderElements.length - 1 ? 0 : this.indexOfShowedSlider
         this.indexOfShowedSlider = this.indexOfShowedSlider < 0 ? this.sliderElements.length - 1 : this.indexOfShowedSlider
-
     }
     // zmniejsza index i zmienia slide ( dla fade)
     reduceIndex = () => {
@@ -673,91 +550,51 @@ class MainSlider {
 
     /// zmiana indexu kropki poprzez klikniecie w nia
     changeIndexByClickOnDot = (e) => {
-
         this.indexOfShowedSlider = parseInt(e.target.dataset.index);
-
     }
-
     ///////// INTERVAL 
 
     /// interval
     setInterval = () => {
         this.intervalForSlider = setInterval(() => {
-         
             if (this.animation === "fade") {
                 this.increaseIndex();
-
             }
-            if (this.animation === "horizontal100" || this.animation === "horizontal100-s" || this.animation === "vertical100-s") {
-                
-
-
-
-                ////////////////////////////////////////
+            if (this.animation === "horizontal") {
                 this.moveIntoNextSlide()
                 if (this.sliderElements.length % this.amountOfVisibleElements) {
                     this.removeActiveForAnItems(this.controlPanelElements)
-
                 }
-
             }
         }, this.intervalTime)
-
     }
 
 
     /////////// ZMETODY DO ZWYKLEJ ZMIANY SLIDE 
     changeSlide = () => {
-        // naprawianie indexu
-
         this.repairIndex();
-        // zabiera kazdemu sliderowi active
         this.sliderElements.forEach(sliderElement => {
             sliderElement.classList.remove("active")
         });
-
-        //dodaje active do elementu na podstawie indexu
         this.sliderElements[this.indexOfShowedSlider].classList.add("active")
-
     }
     /// zmiana slidu w prawo ( dodanie odjecie slidow i przełożenie ich (append ))
     moveIntoNextSlide = () => {
         if (this.amountOfVisibleElements > 1) {
             if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[this.controlPanelElements.length - 1].classList.contains("active")) {
-
-                // wyznaczenie ktory sie powtarza
                 const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
-                /// 4 - (7 % 4)= 4 - 3 =1
-
-
                 this.sliderElements.forEach((sliderElement, index) => {
                     if (index >= numberOfItemsToDelate) {
-                        /// wez wszystko co jest wieksze lub rowne indexowi 1
-
                         console.log(sliderElement.textContent + "  kopiuje");
                         this.elementsToCopy.push(sliderElement.cloneNode(true))
-                        /// wpierdol to na koniec 
-                        /// czyli kopiuje wszystko procz powtorzonego  itemu ale ignoruje ten z indexem 0
-
-
                     }
                     this.elementsToCopy.forEach(elementToCopy => {
                         this.slider.appendChild(elementToCopy)
-
                     })
-
                     this.elementsToCopy = []
-
                     this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-
                 })
-
-                // this.sliderElements.forEach(x=>{
-                //     console.log(x.textContent + " aaaaaaaaaaa");
-                // })
-
             }
-
         }
 
 
@@ -841,29 +678,16 @@ class MainSlider {
 
     /// meroda ktora kopiuje elementy dla ruchu w prawo
     copyElementsForRight = () => {
-
-
-
         if (this.amountOfVisibleElements > 1) {
-
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
-
-
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
-
                 }
             })
-
-
-
         } else {
-
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.indexOfShowedSlider) {
-
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
-
                 }
             })
         }
@@ -880,54 +704,38 @@ class MainSlider {
     }
     /// usuwa niepotrzebne elementy dla ruchu w prawo
     removeCloneElementsForRight = () => {
-
-
         if (this.amountOfVisibleElements > 1) {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
-
-                    // console.log(sliderElement.textContent + "  usuwam");
                     this.slider.removeChild(sliderElement)
-
                 }
             })
         } else {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.indexOfShowedSlider) {
-                    // console.log(sliderElement.textContent + "dodaje");
-
                     this.slider.removeChild(sliderElement)
-
                 }
             })
         }
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-
     }
 
     ///zmiana slidu w lewo ( dodajenie odjecie slidow i przełozenie ich ( prepend))
     moveIntoPrevSlide = () => {
         if (this.amountOfVisibleElements > 1) {
-
             if (this.lastElementWasClicked) {
-
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-
                 this.addTransition(true)
                 this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
                 this.lastElementWasClicked = false
-
                 setTimeout(() => {
                     this.resetContainer()
-                    // this.reduceDotIndex()
                     this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                     this.indexOfShowedSlider -= 1
-                    // this.checkWhichDotNeedToBeActive("right")
                     this.dotClicked = false
                     this.checkWhichDotNeedToBeActive("right")
                 }, this.transition * 1000)
                 return
-
             }
             if (this.dotClicked && this.controlPanelElements[0].classList.contains("active")) {
                 console.log('wchodze');
@@ -937,76 +745,46 @@ class MainSlider {
         }
         this.dotClicked = false
         this.addTransition(false)
-
         this.copyElementsForLeft()
         this.lastElementWasClicked = false
         this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
         setTimeout(() => {
             this.addTransition(true)
             this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
-
-
         }, this.transition * 100)
-
         if (this.amountOfVisibleElements === 1) {
             this.checkWhichDotNeedToBeActive("right")
-
-
         }
         setTimeout(() => {
             this.removeCloneElementsForLeft()
             if (this.amountOfVisibleElements > 1) {
                 this.checkWhichDotNeedToBeActive("right")
             }
-
-
-
-
         }, this.transition * 1000)
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-
-
     }
 /// meroda ktora kopiuje elementy dla ruchu w lewo
     copyElementsForLeft = () => {
-
         this.sliderElements.forEach((sliderElement, index) => {
             if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
-
-
-                // console.log(sliderElement.textContent + "  kopiuje");
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
-
             }
         })
         this.elementsToCopy.reverse()
         this.elementsToCopy.forEach(elementToCopy => {
             this.slider.prepend(elementToCopy)
-
         })
-
         this.elementsToCopy = []
-
     }
 
     // usuwa niepotrzebne elementy dla ruchu w lewo
     removeCloneElementsForLeft = () => {
         this.sliderElements.forEach((sliderElement, index) => {
             if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
-                // console.log(sliderElement.textContent + "usuwam");
                 this.slider.removeChild(sliderElement)
-
             }
         })
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-
-        this.sliderElements.forEach(x => {
-            // console.log(x.textContent);
-        })
-
-
-
-
     }
 
   ////// METODY DLA NAWIGACJI
@@ -1014,59 +792,39 @@ class MainSlider {
 
   /// metoda ktora po kliknieciu w kropke ostatnia wypelnia puste miejsce w sliderze
   fillEmptySpace = () => {
-
     this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     const itemsToAppend = []
     const numberOfItemsToAppend = this.amountOfVisibleElements - (this.sliderElements.length % this.amountOfVisibleElements)
-
-    //   console.log(numberOfItemsToAppend)
     for (let index = 0; index < numberOfItemsToAppend; index++) {
         itemsToAppend.push(this.sliderElements[index].cloneNode(true))
-
     }
     itemsToAppend.forEach(itemToAppend => {
         this.slider.appendChild(itemToAppend)
-        // console.log(itemToAppend.textContent + "dupa");
     })
-
 }
     //// klik w kropke po raz pierwszy dodaje animacje pojawiania sie sliderow 
     fadeElements = (index) => {
-       
         this.addTransition(false)
-
         this.slider.style.transform = `translateX(-${index*this.widthOfVisibleElement}px)`
-
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         let delay = 0.1
         this.indexOfShowedSlider = index
         this.sliderElements.forEach((sliderElement, index) => {
             delay = index % this.amountOfVisibleElements * 0.1
-
-
             this.sliderElements[index].style.transitionDelay = `${delay}s`;
             sliderElement.style.opacity = "0"
-
             setTimeout(() => {
                 sliderElement.style.transitionDuration = `.5s`
                 sliderElement.style.opacity = "1"
             }, 200)
-
         })
-
-
     }
 
     moveIntoSlideWithIndex = (index) => {
-        // console.log(index != 4);
-
         if (index === this.controlPanelElements.length - 1) {
             this.addTransition(false)
-
             this.indexOfShowedSlider = index
             this.slider.style.transform = `translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
-
-
             setTimeout(() => {
                 this.addTransition(true)
                 this.slider.style.transform = `translateX(-${index*this.widthOfVisibleElement}px)`
@@ -1076,15 +834,11 @@ class MainSlider {
             return
         }
         if (this.indexOfLastActiveDot != this.controlPanelElements.length - 1) {
-            // console.log('reset');
             this.resetContainer()
         }
         this.addTransition(false)
-
         this.indexOfShowedSlider = index
         this.slider.style.transform = `translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
-
-
         setTimeout(() => {
             this.addTransition(true)
             this.slider.style.transform = `translateX(-${index*this.widthOfVisibleElement}px)`
@@ -1093,11 +847,6 @@ class MainSlider {
         this.indexOfLastActiveDot = index
     }
    
-
-   
-
-  
-
 
 //// METODY NIWELUJACE POWTARZAJĄCY SIE KOD
 
@@ -1110,18 +859,6 @@ class MainSlider {
             item.classList.remove("active")
         })
     }
-
-
-
-    
-
-
-
-
-   
-
-
-
 
 }
 
