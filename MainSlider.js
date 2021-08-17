@@ -313,7 +313,7 @@ class MainSlider {
                     this.reduceDotIndex()
                 }
             }
-            if (this.animation === "horizontal") {
+            if (this.animation === "horizontal" || this.animation === "vertical") {
                 this.indexManualyChanged = true
                 clearInterval(this.intervalForSlider)
                 if (touchStart > touchEnd) {
