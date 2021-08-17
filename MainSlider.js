@@ -186,6 +186,16 @@ class MainSlider {
                         };
                     };
                 };
+                if (this.animation === "vertical") {
+                    if (this.canIClick) {
+                        this.canIClick = false
+                        this.moveIntoPrevSlide()
+                        this.readyToClick()
+                        if (this.sliderElements.length % this.amountOfVisibleElements) {
+                            this.removeActiveForAnItems(this.controlPanelElements)
+                        }
+                    }
+                }
 
             });
         }
@@ -197,6 +207,16 @@ class MainSlider {
                     this.increaseIndex()
                 }
                 if (this.animation === "horizontal") {
+                    if (this.canIClick) {
+                        this.canIClick = false
+                        this.moveIntoNextSlide()
+                        this.readyToClick()
+                        if (this.sliderElements.length % this.amountOfVisibleElements) {
+                            this.removeActiveForAnItems(this.controlPanelElements)
+                        }
+                    }
+                }
+                if (this.animation === "vertical") {
                     if (this.canIClick) {
                         this.canIClick = false
                         this.moveIntoNextSlide()
@@ -230,6 +250,7 @@ class MainSlider {
         }
         if (this.animation === "vertical") {
             this.readHeightOfVisibleElement()
+            this.addStartedActive();
         }
     }
 
@@ -354,6 +375,10 @@ class MainSlider {
       
     }
 
+    readHeightOfVisibleElement = ()=>{
+        this.heightOfVisibleElement=this.section.offsetHeight
+    }
+
     //// odczytyje ilośc widocznych elementów ( bierze pod uwage margin)
     checkAmountOfElements = () => {
         const style = this.sliderElements[0].currentStyle || window.getComputedStyle(this.sliderElements[0]);
@@ -470,7 +495,6 @@ class MainSlider {
                             this.lastElementWasClicked = true
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.fillEmptySpace()
-                            console.log('tu?');
                             this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                             return
                         }
@@ -636,7 +660,9 @@ class MainSlider {
         this.increseDotIndex()
 
         this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
-
+        if (this.animation === "vertical") {
+            this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
+        }
         this.indexOfShowedSlider += 1
         this.changeValueOfVariables()
         this.copyElementsForRight()
@@ -747,7 +773,13 @@ class MainSlider {
             if (this.lastElementWasClicked) {
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                 this.addTransition(true)
-                this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
+                // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
+                if (this.animation === "vertical") {
+                    this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider-1)}px)`
+                }
+                if (this.animation === "horizontal") {
+                    this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
+                }
                 this.lastElementWasClicked = false
                 setTimeout(() => {
                     this.resetContainer()
@@ -759,7 +791,6 @@ class MainSlider {
                 return
             }
             if (this.dotClicked && this.controlPanelElements[0].classList.contains("active")) {
-                console.log('wchodze');
                 this.resetContainer()
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             }
@@ -768,10 +799,23 @@ class MainSlider {
         this.addTransition(false)
         this.copyElementsForLeft()
         this.lastElementWasClicked = false
-        this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
+        // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
+        if (this.animation === "horizontal") {
+            this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
+        }
+        
+        if (this.animation === "vertical") {
+            this.slider.style.transform = `translateY(-${this.heightOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
+        }
         setTimeout(() => {
             this.addTransition(true)
-            this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
+            if (this.animation === "horizontal") {
+                this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
+            }
+            // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
+            if (this.animation === "vertical") {
+                this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider)}px)`
+            }
         }, this.transition * 100)
         if (this.amountOfVisibleElements === 1) {
             this.checkWhichDotNeedToBeActive("right")
