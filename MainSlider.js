@@ -123,9 +123,8 @@ class MainSlider {
         // console.log(this.mediaQueryList);
 
         this.mediaQueryList.addEventListener('change',()=>{
-            
-            // this.resetSlider()
-            console.log('zmiana');
+            this.resetSlider()
+    
         })
     }
     //// metoda dodająca każdemu sliderowi date index
@@ -138,6 +137,8 @@ class MainSlider {
     resetSlider= ()=>{
         clearInterval(this.intervalForSlider);
         this.resetContainer()
+        this.readWidthOfVisibleElement()
+        this.checkAmountOfElements()
         this.removeActiveForAnItems(this.sliderElements)
         this.addActiveForAnItem(this.sliderElements[0])
         this.addTransition(true)
@@ -159,18 +160,12 @@ class MainSlider {
     }
     //// metoda odpalająca funkcje zgodnie z wyzej ustalonymi zmiennymi
     initSlider = () => {
-        window.addEventListener('resize', () => {
-            this.resetSlider()
     
-           
-        })
         if (this.controlPanel) {
             this.checkAmountOfElements();
             this.createControlPanel(this.amountOfVisibleElements)
             this.groupSliderElements();
-            window.addEventListener('resize', () => {
-                this.checkAmountOfElements();
-            })
+          
             this.addStartedActive();
         };
         if (this.arrowLeft) {
@@ -354,9 +349,9 @@ class MainSlider {
   
     /// odczytuje szerokosc widocznych sliderów *szerokosc kontenera overflow*
     readWidthOfVisibleElement = () => {
-        window.addEventListener('resize', () => {
+       
             this.widthOfVisibleElement = this.slider.offsetWidth;
-        })
+      
     }
 
     //// odczytyje ilośc widocznych elementów ( bierze pod uwage margin)

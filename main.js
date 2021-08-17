@@ -10,4 +10,4 @@ const slider3= new MainSlider("container3")
 // const slider4= new MainSlider("container4")
  
 })
-////////// cos z intervalem jest pokurwione w 2gim sliderze
+//////////// nie resize tylko mediaqueries
