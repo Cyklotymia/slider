@@ -69,7 +69,8 @@ class MainSlider {
         // czy nawigacja zostala kliknieta
         this.dotClicked = false
 
-
+        this.mediaQueryList = window.matchMedia("(orientation: portrait)");
+       
      
         /// poczatkowe funcje inicjalizujace slider
 
@@ -81,6 +82,7 @@ class MainSlider {
         this.addDatasetForSliders()
         // rozpoczyna działanie slidera
         this.initSlider();
+        this.mediaQuery()
 
 
 
@@ -112,7 +114,20 @@ class MainSlider {
         this.heightOfVisibleElement = this.section.offsetHeight;
     };
 
+    mediaQuery= ()=>{
+        if (this.mediaQueryList.matches) {
+           console.log('portrait');
+          } else {
+          console.log('landscape');
+          }
+        // console.log(this.mediaQueryList);
 
+        this.mediaQueryList.addEventListener('change',()=>{
+            
+            // this.resetSlider()
+            console.log('zmiana');
+        })
+    }
     //// metoda dodająca każdemu sliderowi date index
     addDatasetForSliders = () => {
         this.sliderElements.forEach((sliderElement, index) => {
