@@ -25,6 +25,7 @@ class MainSlider {
         this.controlPanel = null;
         // rodzaj animacji dla slidera
         this.animation = null; 
+        this.customChange=null;
         
 
         /// ukrywanie obiektów podczas braku eventów wjazdu myszki na slider
@@ -114,6 +115,9 @@ class MainSlider {
         this.animation = this.slider.dataset.animate ?? null;
         this.widthOfVisibleElement = this.slider.offsetWidth;
         this.heightOfVisibleElement = this.section.offsetHeight;
+        this.customChange=this.slider.dataset.changeslide ?? null;
+        this.customWidth=0
+    
     };
 
     mediaQuery= ()=>{
@@ -204,7 +208,13 @@ class MainSlider {
                 if (this.animation === "horizontal") {
                     if (this.canIClick) {
                         this.canIClick = false
-                        this.moveIntoNextSlide()
+                        if (this.customChange) {
+                            this.moveIntoNextSlide(this.customWidth)
+
+                        }else{
+                            this.moveIntoNextSlide()
+
+                        }
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
                             this.removeActiveForAnItems(this.controlPanelElements)
@@ -246,6 +256,10 @@ class MainSlider {
         if (this.animation === "vertical") {
             this.readHeightOfVisibleElement()
             this.addStartedActive();
+        }
+        if (this.customChange) {
+            this.customCount()
+           
         }
     }
 
@@ -367,11 +381,24 @@ class MainSlider {
     readWidthOfVisibleElement = () => {
        
             this.widthOfVisibleElement = this.slider.offsetWidth;
-      
+
     }
 
     readHeightOfVisibleElement = ()=>{
         this.heightOfVisibleElement=this.section.offsetHeight
+    }
+    customCount=()=>{
+        const numberOfSliders = parseInt(this.customChange)
+        this.sliderElements.forEach((sliderElement,index)=>{
+            if (index<numberOfSliders) {
+                const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
+                const marginLeft = style.marginLeft
+                const marginRight = style.marginRight
+                this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
+            }
+        })
+        console.log(this.customWidth,this.widthOfVisibleElement)
+       
     }
 
     //// odczytyje ilośc widocznych elementów ( bierze pod uwage margin)
@@ -389,17 +416,6 @@ class MainSlider {
     
             this.shouldBeClear(lastAmountOfVisibleElements)
         }
-        // const style = this.sliderElements[0].currentStyle || window.getComputedStyle(this.sliderElements[0]);
-        // let lastAmountOfVisibleElements;
-
-        // const marginLeft = style.marginLeft
-        // const marginRight = style.marginRight
-
-        // lastAmountOfVisibleElements = this.amountOfVisibleElements === null ? Math.round(this.widthOfVisibleElement / (this.sliderElements[0].offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) + parseFloat(marginLeft.substr(0, marginLeft.length - 2)))) : this.amountOfVisibleElements
-
-        // this.amountOfVisibleElements = Math.round(this.widthOfVisibleElement / (this.sliderElements[0].offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) + parseFloat(marginLeft.substr(0, marginLeft.length - 2))))
-
-        // this.shouldBeClear(lastAmountOfVisibleElements)
 
         if (this.animation === "vertical") {
             this.slider.style.transform = "translateY(0)"
@@ -695,12 +711,13 @@ class MainSlider {
         this.sliderElements[this.indexOfShowedSlider].classList.add("active")
     }
     /// zmiana slidu w prawo ( dodanie odjecie slidow i przełożenie ich (append ))
-    moveIntoNextSlide = () => {
+    moveIntoNextSlide = (isCustom=null) => {
       
        
         if (this.amountOfVisibleElements > 1 && this.sliderElements.length%this.amountOfVisibleElements !== 0 ||this.amountOfVisibleElements > 1&& this.spaceFilled ) {
-        
+      
             if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[this.controlPanelElements.length - 1].classList.contains("active")) {
+              
                 
                
               
@@ -727,7 +744,12 @@ class MainSlider {
         this.addTransition(true)
         this.increseDotIndex()
         if (this.animation === "horizontal") {
-            this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
+            if (isCustom) {
+                this.slider.style.transform = `translateX(-${this.customWidth}px)`
+            }else{
+                
+                this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
+            }
             
         }
         if (this.animation === "vertical") {
@@ -735,9 +757,9 @@ class MainSlider {
         }
         this.indexOfShowedSlider += 1
         this.changeValueOfVariables()
-        this.copyElementsForRight()
+        this.copyElementsForRight(isCustom)
         setTimeout(() => {
-            this.removeCloneElementsForRight()
+            this.removeCloneElementsForRight(isCustom)
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             this.addTransition(false)
             this.slider.style.transform = `translateX(-${0}px)`
@@ -796,14 +818,24 @@ class MainSlider {
     }
 
     /// meroda ktora kopiuje elementy dla ruchu w prawo
-    copyElementsForRight = () => {
+    copyElementsForRight = (isCustom=null) => {
         if (this.amountOfVisibleElements > 1) {
-           
-            this.sliderElements.forEach((sliderElement, index) => {
-                if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
+            if (isCustom) {
+               this.sliderElements.forEach((sliderElement,index)=>{
+                   if (index<parseInt(this.customChange)) {
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
-                }
-            })
+                    
+                   }
+               })
+            }else{
+                this.sliderElements.forEach((sliderElement, index) => {
+                    if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
+                        this.elementsToCopy.push(sliderElement.cloneNode(true))
+                    }
+                })
+
+            }
+            
         } else {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.indexOfShowedSlider) {
@@ -823,13 +855,23 @@ class MainSlider {
 
     }
     /// usuwa niepotrzebne elementy dla ruchu w prawo
-    removeCloneElementsForRight = () => {
+    removeCloneElementsForRight = (isCustom=null) => {
         if (this.amountOfVisibleElements > 1) {
-            this.sliderElements.forEach((sliderElement, index) => {
-                if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
-                    this.slider.removeChild(sliderElement)
-                }
-            })
+            if (isCustom) {
+                this.sliderElements.forEach((sliderElement,index)=>{
+                    if (index<parseInt(this.customChange)) {
+                     this.slider.removeChild(sliderElement)
+                     
+                    }
+                })
+            }else{
+                this.sliderElements.forEach((sliderElement, index) => {
+                    if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
+                        this.slider.removeChild(sliderElement)
+                    }
+                })
+
+            }
         } else {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index < this.indexOfShowedSlider) {
@@ -926,6 +968,8 @@ class MainSlider {
         })
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     }
+
+   
 
   ////// METODY DLA NAWIGACJI
 
