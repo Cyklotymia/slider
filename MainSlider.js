@@ -43,6 +43,7 @@ class MainSlider {
         this.amountOfVisibleElements = null;
         // szerokość kontenera z overflow, czyli ograniczającego widocznośc slidów
         this.widthOfVisibleElement = null;
+        this.customWidth=0
 
         /// zmienne do których musi mieć dostęp wiele funkcji
         // index wyświetlanego slidera
@@ -116,7 +117,7 @@ class MainSlider {
         this.widthOfVisibleElement = this.slider.offsetWidth;
         this.heightOfVisibleElement = this.section.offsetHeight;
         this.customChange=this.slider.dataset.changeslide ?? null;
-        this.customWidth=0
+        
     
     };
 
@@ -139,6 +140,7 @@ class MainSlider {
         this.sliderElements=this.section.querySelectorAll(".js__MainSlider-element");
         this.readWidthOfVisibleElement()
         this.checkAmountOfElements()
+        this.customWidth=0
         this.indexOfShowedSlider=0
         this.indexOfLastActiveDot=0
         this.remaindMeLastIndex=0
@@ -156,6 +158,7 @@ class MainSlider {
        this.addDatasetForSliders()
        this.groupSliderElements()
         if (this.customChange) {
+
             
             this.customCount()
         }
@@ -185,7 +188,7 @@ class MainSlider {
                         this.canIClick = false
                         if (this.customChange) {
                             this.moveIntoPrevSlide(this.customWidth)
-                            console.log('custom');
+                          
                             
                         }else{
 
@@ -340,7 +343,13 @@ class MainSlider {
                 if (touchStart > touchEnd) {
                     if (this.canIClick) {
                         this.canIClick = false
-                        this.moveIntoNextSlide()
+                        if (this.customChange) {
+                            this.moveIntoNextSlide(this.customWidth)
+
+                        }else{
+                            this.moveIntoNextSlide()
+
+                        }
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
                             this.removeActiveForAnItems(this.controlPanelElements)
@@ -350,7 +359,14 @@ class MainSlider {
                 } else {
                     if (this.canIClick) {
                         this.canIClick = false
-                        this.moveIntoPrevSlide()
+                        if (this.customChange) {
+                            this.moveIntoPrevSlide(this.customWidth)
+                          
+                            
+                        }else{
+
+                            this.moveIntoPrevSlide()
+                        }
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
                             this.removeActiveForAnItems(this.controlPanelElements)
