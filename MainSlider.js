@@ -178,7 +178,13 @@ class MainSlider {
                 if (this.animation === "horizontal") {
                     if (this.canIClick) {
                         this.canIClick = false
-                        this.moveIntoPrevSlide()
+                        if (this.customChange) {
+                            this.moveIntoPrevSlide(this.customWidth)
+                            
+                        }else{
+
+                            this.moveIntoPrevSlide()
+                        }
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
                             this.removeActiveForAnItems(this.controlPanelElements);
@@ -693,7 +699,7 @@ class MainSlider {
                 this.increaseIndex();
             }
             if (this.animation === "horizontal" || this.animation === "vertical") {
-                if (this.customCount) {
+                if (this.customChange) {
                     this.moveIntoNextSlide(this.customWidth)
                 }else{
                     this.moveIntoNextSlide()
@@ -862,9 +868,12 @@ class MainSlider {
     /// usuwa niepotrzebne elementy dla ruchu w prawo
     removeCloneElementsForRight = (isCustom=null) => {
         if (this.amountOfVisibleElements > 1) {
+           
             if (isCustom) {
+              
                 this.sliderElements.forEach((sliderElement,index)=>{
                     if (index<parseInt(this.customChange)) {
+                       
                      this.slider.removeChild(sliderElement)
                      
                     }
@@ -888,11 +897,11 @@ class MainSlider {
     }
 
     ///zmiana slidu w lewo ( dodajenie odjecie slidow i przełozenie ich ( prepend))
-    moveIntoPrevSlide = () => {
+    moveIntoPrevSlide = (isCustom=null) => {
         if (this.amountOfVisibleElements > 1) {
-            console.log(this.lastElementWasClicked);
+           
             if (this.lastElementWasClicked) {
-                console.log('wchodze');
+              
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                 this.addTransition(true)
                 // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
@@ -913,17 +922,23 @@ class MainSlider {
                 return
             }
             if (this.dotClicked && this.controlPanelElements[0].classList.contains("active")) {
+               
                 this.resetContainer()
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             }
         }
         this.dotClicked = false
         this.addTransition(false)
-        this.copyElementsForLeft()
+        this.copyElementsForLeft(isCustom)
         this.lastElementWasClicked = false
         // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
         if (this.animation === "horizontal") {
-            this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
+            if (isCustom) {
+                this.slider.style.transform = `translateX(-${this.customWidth}px)`  
+            }else{
+
+                this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
+            }
         }
         
         if (this.animation === "vertical") {
@@ -932,7 +947,13 @@ class MainSlider {
         setTimeout(() => {
             this.addTransition(true)
             if (this.animation === "horizontal") {
-                this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
+                if (isCustom) {
+                   
+                    this.slider.style.transform = `translateX(-${0}px)`
+                }else{
+
+                    this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
+                }
             }
             // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
             if (this.animation === "vertical") {
@@ -943,7 +964,13 @@ class MainSlider {
             this.checkWhichDotNeedToBeActive("right")
         }
         setTimeout(() => {
-            this.removeCloneElementsForLeft()
+            if (isCustom) {
+                this.removeCloneElementsForLeft(isCustom)
+                
+            }else{
+
+                this.removeCloneElementsForLeft()
+            }
             if (this.amountOfVisibleElements > 1) {
                 this.checkWhichDotNeedToBeActive("right")
             }
@@ -951,12 +978,22 @@ class MainSlider {
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     }
 /// meroda ktora kopiuje elementy dla ruchu w lewo
-    copyElementsForLeft = () => {
-        this.sliderElements.forEach((sliderElement, index) => {
-            if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
-                this.elementsToCopy.push(sliderElement.cloneNode(true))
-            }
-        })
+    copyElementsForLeft = (isCustom=null) => {
+        if (isCustom) {
+            this.sliderElements.forEach((sliderElement, index) => {
+                if (index >= this.sliderElements.length -parseInt(this.customChange) ) {
+                   console.log(sliderElement.textContent + "  kopiuje");
+                    this.elementsToCopy.push(sliderElement.cloneNode(true))
+                }
+            })  
+        }else{
+            this.sliderElements.forEach((sliderElement, index) => {
+                if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
+                    this.elementsToCopy.push(sliderElement.cloneNode(true))
+                }
+            })
+
+        }
         this.elementsToCopy.reverse()
         this.elementsToCopy.forEach(elementToCopy => {
             this.slider.prepend(elementToCopy)
@@ -965,12 +1002,22 @@ class MainSlider {
     }
 
     // usuwa niepotrzebne elementy dla ruchu w lewo
-    removeCloneElementsForLeft = () => {
-        this.sliderElements.forEach((sliderElement, index) => {
-            if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
-                this.slider.removeChild(sliderElement)
-            }
-        })
+    removeCloneElementsForLeft = (isCustom=null) => {
+      
+        if (isCustom) {
+            this.sliderElements.forEach((sliderElement, index) => {
+                if (index >= this.sliderElements.length - parseInt(this.customChange)) {
+                    this.slider.removeChild(sliderElement)
+                }
+            }) 
+        }else{
+            this.sliderElements.forEach((sliderElement, index) => {
+                if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
+                    this.slider.removeChild(sliderElement)
+                }
+            })
+
+        }
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     }
 
