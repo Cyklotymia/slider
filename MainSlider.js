@@ -70,6 +70,8 @@ class MainSlider {
         this.dotClicked = false
 
         this.mediaQueryList = window.matchMedia("(orientation: portrait)");
+
+        this.spaceFilled = false
        
      
         /// poczatkowe funcje inicjalizujace slider
@@ -502,6 +504,7 @@ class MainSlider {
                     this.indexManualyChanged = true
                     this.addActiveForAnItem(e.target)
                  if (this.sliderElements.length % this.amountOfVisibleElements===0 ) {
+                    
                      if (!this.dotClicked) {
                          this.resetContainer()
                          this.fadeElements(parseInt(e.target.dataset.index))
@@ -512,6 +515,7 @@ class MainSlider {
                          
                      }
                      if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
+                         
                         this.lastElementWasClicked = true
                         this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                         this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
@@ -521,8 +525,11 @@ class MainSlider {
 
                  }
                     if (this.amountOfVisibleElements > 1 && this.sliderElements.length % this.amountOfVisibleElements) {
+                     
                        
                         if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
+                           
+                           
                             this.lastElementWasClicked = true
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.fillEmptySpace()
@@ -530,6 +537,7 @@ class MainSlider {
                             return
                         }
                         if (this.dotClicked) {
+                           
                             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                             this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
                             this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
@@ -539,6 +547,7 @@ class MainSlider {
                         if (this.isTheLast(parseInt(e.target.dataset.index))) {
                             this.lastElementWasClicked = true
                             this.fillEmptySpace()
+                            
                         }
                        
                         this.fadeElements(parseInt(e.target.dataset.index))
@@ -582,6 +591,7 @@ class MainSlider {
                         return
                     }
                     if (this.animation === "horizontal" || this.animation === "vertical") {
+                       
                         this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
                         this.dotClicked = true
                         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
@@ -686,9 +696,10 @@ class MainSlider {
     }
     /// zmiana slidu w prawo ( dodanie odjecie slidow i przełożenie ich (append ))
     moveIntoNextSlide = () => {
+      
        
-        if (this.amountOfVisibleElements > 1 && this.sliderElements.length%this.amountOfVisibleElements !== 0) {
-           
+        if (this.amountOfVisibleElements > 1 && this.sliderElements.length%this.amountOfVisibleElements !== 0 ||this.amountOfVisibleElements > 1&& this.spaceFilled ) {
+        
             if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[this.controlPanelElements.length - 1].classList.contains("active")) {
                 
                
@@ -921,6 +932,7 @@ class MainSlider {
 
   /// metoda ktora po kliknieciu w kropke ostatnia wypelnia puste miejsce w sliderze
   fillEmptySpace = () => {
+      this.spaceFilled=true
     this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     const itemsToAppend = []
     const numberOfItemsToAppend = this.amountOfVisibleElements - (this.sliderElements.length % this.amountOfVisibleElements)
