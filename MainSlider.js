@@ -693,7 +693,12 @@ class MainSlider {
                 this.increaseIndex();
             }
             if (this.animation === "horizontal" || this.animation === "vertical") {
-                this.moveIntoNextSlide()
+                if (this.customCount) {
+                    this.moveIntoNextSlide(this.customWidth)
+                }else{
+                    this.moveIntoNextSlide()
+
+                }
                 if (this.sliderElements.length % this.amountOfVisibleElements) {
                     this.removeActiveForAnItems(this.controlPanelElements)
                 }
