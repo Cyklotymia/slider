@@ -418,10 +418,10 @@ class MainSlider {
 
      //// metoda zwracająca true/false przy sprawdzeniu czy kliknieta kropka jest ostatnia kropką
      isTheLast = (indexOfClickedDot) => {
-         this.lastElementWasClicked=true
-        let flag;
-        this.controlPanelElements.forEach(controlPanelElement => {
-            if (indexOfClickedDot === this.controlPanelElements.length - 1) {
+         let flag;
+         this.controlPanelElements.forEach(controlPanelElement => {
+             if (indexOfClickedDot === this.controlPanelElements.length - 1) {
+                this.lastElementWasClicked=true
                 flag = true;
             }
         })
@@ -498,6 +498,7 @@ class MainSlider {
                     this.removeActiveForAnItems(this.controlPanelElements)
                     this.lastElementWasClicked = false
                     this.isTheLast(parseInt(e.target.dataset.index))
+                    console.log(this.lastElementWasClicked);
                     this.indexManualyChanged = true
                     this.addActiveForAnItem(e.target)
                  if (this.sliderElements.length % this.amountOfVisibleElements===0 ) {
