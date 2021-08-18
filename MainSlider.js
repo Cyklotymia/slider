@@ -134,6 +134,10 @@ class MainSlider {
         this.resetContainer()
         this.readWidthOfVisibleElement()
         this.checkAmountOfElements()
+        this.indexOfShowedSlider=0
+        this.indexOfLastActiveDot=0
+        this.remaindMeLastIndex=0
+       this.lastElementWasClicked=false
         this.removeActiveForAnItems(this.sliderElements)
         this.addActiveForAnItem(this.sliderElements[0])
         this.addTransition(true)
@@ -144,10 +148,6 @@ class MainSlider {
         this.removeActiveForAnItems(this.controlPanelElements)
         this.addActiveForAnItem(this.controlPanelElements[0])
 
-        this.indexOfShowedSlider=0
-        this.indexOfLastActiveDot=0
-        this.remaindMeLastIndex=0
-       this.lastElementWasClicked=false
         this.sliderElements=this.section.querySelectorAll(".js__MainSlider-element");
        this.addDatasetForSliders()
        this.groupSliderElements()
@@ -1055,6 +1055,7 @@ class MainSlider {
 
 /// data-animate="fade" => dla js__MainSlider  jak maja slidy sie przenikac przez siebie
 /// data-animate="horizontal" => dla js__MainSlider  jak slider jest lewo prawo
+/// data-changeSlide=1 => ruch slidu o 1 element
 
 
 /// horizontal NIE MOZE BYC NTH CHILD STYLOWANE BO BEDA SIE ZMIENIAC CHILDY 
