@@ -136,6 +136,7 @@ class MainSlider {
     resetSlider= ()=>{
         clearInterval(this.intervalForSlider);
         this.resetContainer()
+        this.sliderElements=this.section.querySelectorAll(".js__MainSlider-element");
         this.readWidthOfVisibleElement()
         this.checkAmountOfElements()
         this.indexOfShowedSlider=0
@@ -146,21 +147,25 @@ class MainSlider {
         this.addActiveForAnItem(this.sliderElements[0])
         this.addTransition(true)
         this.slider.style.transform = `translateX(0px)`
-
+       
         this.controlPanel.innerHTML=""
         this.createControlPanel(this.amountOfVisibleElements)
         this.removeActiveForAnItems(this.controlPanelElements)
         this.addActiveForAnItem(this.controlPanelElements[0])
 
-        this.sliderElements=this.section.querySelectorAll(".js__MainSlider-element");
        this.addDatasetForSliders()
        this.groupSliderElements()
-
+        if (this.customChange) {
+            
+            this.customCount()
+        }
+        
     }
     //// metoda odpalająca funkcje zgodnie z wyzej ustalonymi zmiennymi
     initSlider = () => {
     
         if (this.controlPanel) {
+          
             this.checkAmountOfElements();
             this.createControlPanel(this.amountOfVisibleElements)
             this.groupSliderElements();
@@ -180,6 +185,7 @@ class MainSlider {
                         this.canIClick = false
                         if (this.customChange) {
                             this.moveIntoPrevSlide(this.customWidth)
+                            console.log('custom');
                             
                         }else{
 
@@ -512,13 +518,16 @@ class MainSlider {
     }
     /// tworzenie panelu z kropkami
     createControlPanel = (numberOfDots = null) => {
-       
+        
         let indexForDot = -1
         this.sliderElements.forEach((sliderElement, index) => {
+           
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
-                
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
+                    if (this.customChange>1) {
+                        return
+                    }
                     this.changeValueOfVariables()
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
@@ -910,19 +919,19 @@ class MainSlider {
                     this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider-1)}px)`
                 }
                 if (this.animation === "horizontal") {
-                    if (isCustom) {
+                    // if (isCustom) {
                     
-                    //   this.sliderElements.forEach(x=>{
-                    //       console.log(x.textContent);
-                    //   })
-                    const widthOfOneElement=this.customWidth/this.customChange
-                    const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
-                    console.log(sliderWidth);
-                        this.slider.style.transform = `translateX(-${sliderWidth - (widthOfOneElement*this.customChange)}px)`
-                    }else{
+                    // //   this.sliderElements.forEach(x=>{
+                    // //       console.log(x.textContent);
+                    // //   })
+                    // const widthOfOneElement=this.customWidth/this.customChange
+                    // const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
+                    // console.log(sliderWidth);
+                    //     this.slider.style.transform = `translateX(-${sliderWidth - (widthOfOneElement*this.customChange)}px)`
+                    // }else{
                         this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
 
-                    }
+                    // }
                 }
                 this.lastElementWasClicked = false
                 setTimeout(() => {
@@ -947,6 +956,8 @@ class MainSlider {
         // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
         if (this.animation === "horizontal") {
             if (isCustom) {
+                
+               
                 this.slider.style.transform = `translateX(-${this.customWidth}px)`  
             }else{
 
@@ -961,7 +972,7 @@ class MainSlider {
             this.addTransition(true)
             if (this.animation === "horizontal") {
                 if (isCustom) {
-                   
+                   console.log('end');
                     this.slider.style.transform = `translateX(-${0}px)`
                 }else{
 
@@ -995,6 +1006,7 @@ class MainSlider {
         if (isCustom) {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index >= this.sliderElements.length -parseInt(this.customChange) ) {
+                    console.log(sliderElement.textContent + " kopiuje");
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
                 }
             })  
@@ -1019,6 +1031,7 @@ class MainSlider {
         if (isCustom) {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index >= this.sliderElements.length - parseInt(this.customChange)) {
+                    console.log(sliderElement.textContent + "  usuwam");
                     this.slider.removeChild(sliderElement)
                 }
             }) 
