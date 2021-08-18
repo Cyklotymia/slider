@@ -902,7 +902,7 @@ class MainSlider {
         if (this.amountOfVisibleElements > 1) {
            
             if (this.lastElementWasClicked) {
-              
+             
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                 this.addTransition(true)
                 // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
@@ -910,7 +910,19 @@ class MainSlider {
                     this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider-1)}px)`
                 }
                 if (this.animation === "horizontal") {
-                    this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
+                    if (isCustom) {
+                    
+                    //   this.sliderElements.forEach(x=>{
+                    //       console.log(x.textContent);
+                    //   })
+                    const widthOfOneElement=this.customWidth/this.customChange
+                    const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
+                    console.log(sliderWidth);
+                        this.slider.style.transform = `translateX(-${sliderWidth - (widthOfOneElement*this.customChange)}px)`
+                    }else{
+                        this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
+
+                    }
                 }
                 this.lastElementWasClicked = false
                 setTimeout(() => {
