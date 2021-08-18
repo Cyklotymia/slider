@@ -403,7 +403,6 @@ class MainSlider {
                 this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
             }
         })
-        console.log(this.customWidth,this.widthOfVisibleElement)
        
     }
 
@@ -482,6 +481,9 @@ class MainSlider {
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
                     let activeSlide = this.sliderElements[index - this.amountOfVisibleElements]
+                    if (this.customChange) {
+                        activeSlide = this.sliderElements[index - parseInt(this.customChange)]
+                    }
                     if (!activeSlide) {
                         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                         activeSlide = this.sliderElements[this.sliderElements.length - 1]
@@ -522,7 +524,6 @@ class MainSlider {
                     this.removeActiveForAnItems(this.controlPanelElements)
                     this.lastElementWasClicked = false
                     this.isTheLast(parseInt(e.target.dataset.index))
-                    console.log(this.lastElementWasClicked);
                     this.indexManualyChanged = true
                     this.addActiveForAnItem(e.target)
                  if (this.sliderElements.length % this.amountOfVisibleElements===0 ) {
@@ -982,7 +983,6 @@ class MainSlider {
         if (isCustom) {
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index >= this.sliderElements.length -parseInt(this.customChange) ) {
-                   console.log(sliderElement.textContent + "  kopiuje");
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
                 }
             })  
