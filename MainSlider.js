@@ -418,6 +418,7 @@ class MainSlider {
 
      //// metoda zwracająca true/false przy sprawdzeniu czy kliknieta kropka jest ostatnia kropką
      isTheLast = (indexOfClickedDot) => {
+         this.lastElementWasClicked=true
         let flag;
         this.controlPanelElements.forEach(controlPanelElement => {
             if (indexOfClickedDot === this.controlPanelElements.length - 1) {
@@ -496,6 +497,7 @@ class MainSlider {
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
                     this.lastElementWasClicked = false
+                    this.isTheLast(parseInt(e.target.dataset.index))
                     this.indexManualyChanged = true
                     this.addActiveForAnItem(e.target)
                  if (this.sliderElements.length % this.amountOfVisibleElements===0 ) {
@@ -829,7 +831,9 @@ class MainSlider {
     ///zmiana slidu w lewo ( dodajenie odjecie slidow i przełozenie ich ( prepend))
     moveIntoPrevSlide = () => {
         if (this.amountOfVisibleElements > 1) {
+            console.log(this.lastElementWasClicked);
             if (this.lastElementWasClicked) {
+                console.log('wchodze');
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                 this.addTransition(true)
                 // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
