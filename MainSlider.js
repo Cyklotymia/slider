@@ -749,7 +749,40 @@ class MainSlider {
     }
     /// zmiana slidu w prawo ( dodanie odjecie slidow i przełożenie ich (append ))
     moveIntoNextSlide = (isCustom=null) => {
-      
+      if (this.dotClicked && this.customChange) {
+         const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
+         this.addTransition(true)
+         console.log(sliderWidth);
+         this.slider.style.transform=`translateX(-${sliderWidth+this.customWidth}px)`
+         this.sliderElements.forEach((sliderElement,index)=>{
+             if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
+                 console.log(sliderElement.textContent + " kopiuje");
+                this.elementsToCopy.push(sliderElement.cloneNode(true))
+             }
+         })
+         this.elementsToCopy.forEach(elementToCopy => {
+            this.slider.appendChild(elementToCopy)
+
+        })
+        
+        this.elementsToCopy = []
+        
+        setTimeout(()=>{
+            this.addTransition(false)
+            this.sliderElements.forEach((sliderElement,index)=>{
+                if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
+                    console.log(sliderElement.textContent + " usuwam");
+                    this.slider.removeChild(sliderElement)
+                }
+            })
+            this.slider.style.transform = `translateX(-${0}px)`
+            this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+            this.checkWhichDotNeedToBeActive("left")
+        },1000)
+
+          this.dotClicked=false
+          return
+      }
        
         if (this.amountOfVisibleElements > 1 && this.sliderElements.length%this.amountOfVisibleElements !== 0 ||this.amountOfVisibleElements > 1&& this.spaceFilled ) {
       
@@ -935,16 +968,7 @@ class MainSlider {
                     this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider-1)}px)`
                 }
                 if (this.animation === "horizontal") {
-                    // if (isCustom) {
-                    
-                    // //   this.sliderElements.forEach(x=>{
-                    // //       console.log(x.textContent);
-                    // //   })
-                    // const widthOfOneElement=this.customWidth/this.customChange
-                    // const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
-                    // console.log(sliderWidth);
-                    //     this.slider.style.transform = `translateX(-${sliderWidth - (widthOfOneElement*this.customChange)}px)`
-                    // }else{
+                
                         this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
 
                     // }
