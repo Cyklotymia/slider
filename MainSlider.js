@@ -750,6 +750,7 @@ class MainSlider {
     /// zmiana slidu w prawo ( dodanie odjecie slidow i przełożenie ich (append ))
     moveIntoNextSlide = (isCustom=null) => {
       if (this.dotClicked && this.customChange) {
+   
          const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
          this.addTransition(true)
          this.slider.style.transform=`translateX(-${sliderWidth+this.customWidth}px)`
@@ -762,6 +763,9 @@ class MainSlider {
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             this.checkWhichDotNeedToBeActive("left")
             this.dotClicked=false
+            if (this.lastElementWasClicked) {
+                this.lastElementWasClicked=false
+            }
         },1000)
           return
       }
@@ -871,11 +875,16 @@ class MainSlider {
 
     /// meroda ktora kopiuje elementy dla ruchu w prawo
     copyElementsForRight = (isCustom=null) => {
+        let itemsToNOTCopy=0
         if (this.amountOfVisibleElements > 1) {
             if (isCustom) {
                 if (isCustom&& this.dotClicked ) {
+                    if (this.lastElementWasClicked) {
+                        itemsToNOTCopy = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
+                        
+                    }
                     this.sliderElements.forEach((sliderElement,index)=>{
-                        if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
+                        if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot && index+1!==itemsToNOTCopy) {
                             console.log(sliderElement.textContent + " kopiuje");
                            this.elementsToCopy.push(sliderElement.cloneNode(true))
                         }
