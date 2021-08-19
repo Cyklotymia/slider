@@ -752,35 +752,17 @@ class MainSlider {
       if (this.dotClicked && this.customChange) {
          const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
          this.addTransition(true)
-         console.log(sliderWidth);
          this.slider.style.transform=`translateX(-${sliderWidth+this.customWidth}px)`
-         this.sliderElements.forEach((sliderElement,index)=>{
-             if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
-                 console.log(sliderElement.textContent + " kopiuje");
-                this.elementsToCopy.push(sliderElement.cloneNode(true))
-             }
-         })
-         this.elementsToCopy.forEach(elementToCopy => {
-            this.slider.appendChild(elementToCopy)
-
-        })
-        
-        this.elementsToCopy = []
-        
+        this.copyElementsForRight(isCustom)
         setTimeout(()=>{
             this.addTransition(false)
-            this.sliderElements.forEach((sliderElement,index)=>{
-                if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
-                    console.log(sliderElement.textContent + " usuwam");
-                    this.slider.removeChild(sliderElement)
-                }
-            })
+        
+            this.removeCloneElementsForRight(isCustom)
             this.slider.style.transform = `translateX(-${0}px)`
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             this.checkWhichDotNeedToBeActive("left")
+            this.dotClicked=false
         },1000)
-
-          this.dotClicked=false
           return
       }
        
@@ -891,12 +873,22 @@ class MainSlider {
     copyElementsForRight = (isCustom=null) => {
         if (this.amountOfVisibleElements > 1) {
             if (isCustom) {
-               this.sliderElements.forEach((sliderElement,index)=>{
-                   if (index<parseInt(this.customChange)) {
-                    this.elementsToCopy.push(sliderElement.cloneNode(true))
-                    
-                   }
-               })
+                if (isCustom&& this.dotClicked ) {
+                    this.sliderElements.forEach((sliderElement,index)=>{
+                        if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
+                            console.log(sliderElement.textContent + " kopiuje");
+                           this.elementsToCopy.push(sliderElement.cloneNode(true))
+                        }
+                    })
+                }else{
+                    this.sliderElements.forEach((sliderElement,index)=>{
+                        if (index<parseInt(this.customChange)) {
+                         this.elementsToCopy.push(sliderElement.cloneNode(true))
+                         
+                        }
+                    })
+
+                }
             }else{
                 this.sliderElements.forEach((sliderElement, index) => {
                     if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
@@ -929,14 +921,24 @@ class MainSlider {
         if (this.amountOfVisibleElements > 1) {
            
             if (isCustom) {
-              
+              if (this.dotClicked) {
+               
                 this.sliderElements.forEach((sliderElement,index)=>{
-                    if (index<parseInt(this.customChange)) {
-                       
-                     this.slider.removeChild(sliderElement)
-                     
+                    if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
+                        console.log(sliderElement.textContent + " usuwam");
+                        this.slider.removeChild(sliderElement)
                     }
                 })
+              }else{
+                  this.sliderElements.forEach((sliderElement,index)=>{
+                      if (index<parseInt(this.customChange)) {
+                         
+                       this.slider.removeChild(sliderElement)
+                       
+                      }
+                  })
+
+              }
             }else{
                 this.sliderElements.forEach((sliderElement, index) => {
                     if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
