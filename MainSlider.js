@@ -541,9 +541,9 @@ class MainSlider {
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
-                    if (this.customChange>1) {
-                        return
-                    }
+                    // if (this.customChange>1) {
+                    //     return
+                    // }
                     this.changeValueOfVariables()
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
@@ -883,14 +883,16 @@ class MainSlider {
                         itemsToNOTCopy = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
                         
                     }
+                   
                     this.sliderElements.forEach((sliderElement,index)=>{
-                        if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot && index+1!==itemsToNOTCopy) {
-                            console.log(sliderElement.textContent + " kopiuje");
+                        if (index+1-this.customChange<=this.amountOfVisibleElements*this.indexOfLastActiveDot && index+1!==itemsToNOTCopy) {
+                            console.log(sliderElement.textContent + " kopiujeee");
                            this.elementsToCopy.push(sliderElement.cloneNode(true))
                         }
                     })
                 }else{
                     this.sliderElements.forEach((sliderElement,index)=>{
+                        
                         if (index<parseInt(this.customChange)) {
                          this.elementsToCopy.push(sliderElement.cloneNode(true))
                          
@@ -933,7 +935,7 @@ class MainSlider {
               if (this.dotClicked) {
                
                 this.sliderElements.forEach((sliderElement,index)=>{
-                    if (index<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
+                    if (index+1-this.customChange<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
                         console.log(sliderElement.textContent + " usuwam");
                         this.slider.removeChild(sliderElement)
                     }
