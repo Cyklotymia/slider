@@ -886,7 +886,7 @@ class MainSlider {
                    
                     this.sliderElements.forEach((sliderElement,index)=>{
                         if (index+1-this.customChange<=this.amountOfVisibleElements*this.indexOfLastActiveDot && index+1!==itemsToNOTCopy) {
-                            console.log(sliderElement.textContent + " kopiujeee");
+                          
                            this.elementsToCopy.push(sliderElement.cloneNode(true))
                         }
                     })
@@ -970,10 +970,43 @@ class MainSlider {
 
     ///zmiana slidu w lewo ( dodajenie odjecie slidow i przełozenie ich ( prepend))
     moveIntoPrevSlide = (isCustom=null) => {
+        if (this.dotClicked && this.customChange) {
+   
+            const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
+            this.addTransition(true)
+            this.slider.style.transform=`translateX(-${sliderWidth-this.customWidth}px)`
+            console.log(this.amountOfVisibleElements*this.indexOfShowedSlider);
+            setTimeout(()=>{
+                this.sliderElements.forEach((sliderElement,index)=>{
+                    if (index<this.amountOfVisibleElements*this.indexOfLastActiveDot-this.customChange) {
+                        this.elementsToCopy.push(sliderElement.cloneNode(true))
+                    }
+                })
+                this.elementsToCopy.forEach(elementToCopy => {
+                    this.slider.appendChild(elementToCopy)
+                })
+               
+                this.elementsToCopy=[]
+
+                this.sliderElements.forEach((sliderElement,index)=>{
+                    if (index<this.amountOfVisibleElements*this.indexOfLastActiveDot-this.customChange) {
+                        this.slider.removeChild(sliderElement)
+                    }
+                })
+                this.addTransition(false)
+                this.slider.style.transform=`translateX(-${0}px)`
+                this.dotClicked=false
+                this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+                this.checkWhichDotNeedToBeActive("right")
+              
+            },this.transition *1000)
+            
+             return
+         }
         if (this.amountOfVisibleElements > 1) {
            
             if (this.lastElementWasClicked) {
-             
+             console.log('object');
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                 this.addTransition(true)
                 // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
@@ -1056,13 +1089,22 @@ class MainSlider {
     }
 /// meroda ktora kopiuje elementy dla ruchu w lewo
     copyElementsForLeft = (isCustom=null) => {
+      
         if (isCustom) {
-            this.sliderElements.forEach((sliderElement, index) => {
-                if (index >= this.sliderElements.length -parseInt(this.customChange) ) {
-                    console.log(sliderElement.textContent + " kopiuje");
-                    this.elementsToCopy.push(sliderElement.cloneNode(true))
-                }
-            })  
+     
+           this.sliderElements.forEach((sliderElement, index) => {
+               if (index >= this.sliderElements.length -parseInt(this.customChange) ) {
+                   console.log(sliderElement.textContent + " kopiuje");
+                   this.elementsToCopy.push(sliderElement.cloneNode(true))
+               }
+           })  
+
+       
+              
+                
+           
+
+            
         }else{
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
@@ -1082,12 +1124,15 @@ class MainSlider {
     removeCloneElementsForLeft = (isCustom=null) => {
       
         if (isCustom) {
-            this.sliderElements.forEach((sliderElement, index) => {
-                if (index >= this.sliderElements.length - parseInt(this.customChange)) {
-                    console.log(sliderElement.textContent + "  usuwam");
-                    this.slider.removeChild(sliderElement)
-                }
-            }) 
+          
+                this.sliderElements.forEach((sliderElement, index) => {
+                    if (index >= this.sliderElements.length - parseInt(this.customChange)) {
+                        console.log(sliderElement.textContent + "  usuwam");
+                        this.slider.removeChild(sliderElement)
+                    }
+                }) 
+
+            
         }else{
             this.sliderElements.forEach((sliderElement, index) => {
                 if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
