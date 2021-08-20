@@ -970,39 +970,42 @@ class MainSlider {
 
     ///zmiana slidu w lewo ( dodajenie odjecie slidow i przełozenie ich ( prepend))
     moveIntoPrevSlide = (isCustom=null) => {
-        if (this.dotClicked && this.customChange) {
-   
-            const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
-            this.addTransition(true)
-            this.slider.style.transform=`translateX(-${sliderWidth-this.customWidth}px)`
-            console.log(this.amountOfVisibleElements*this.indexOfShowedSlider);
-            setTimeout(()=>{
-                this.sliderElements.forEach((sliderElement,index)=>{
-                    if (index<this.amountOfVisibleElements*this.indexOfLastActiveDot-this.customChange) {
-                        this.elementsToCopy.push(sliderElement.cloneNode(true))
-                    }
-                })
-                this.elementsToCopy.forEach(elementToCopy => {
-                    this.slider.appendChild(elementToCopy)
-                })
-               
-                this.elementsToCopy=[]
-
-                this.sliderElements.forEach((sliderElement,index)=>{
-                    if (index<this.amountOfVisibleElements*this.indexOfLastActiveDot-this.customChange) {
-                        this.slider.removeChild(sliderElement)
-                    }
-                })
-                this.addTransition(false)
-                this.slider.style.transform=`translateX(-${0}px)`
-                this.dotClicked=false
-                this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-                this.checkWhichDotNeedToBeActive("right")
-              
-            },this.transition *1000)
+        if (!this.controlPanelElements[0].classList.contains("active")) {
+            if (this.dotClicked && this.customChange) {
+       
+                const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
+                this.addTransition(true)
+                this.slider.style.transform=`translateX(-${sliderWidth-this.customWidth}px)`
+                console.log(this.amountOfVisibleElements*this.indexOfShowedSlider);
+                setTimeout(()=>{
+                    this.sliderElements.forEach((sliderElement,index)=>{
+                        if (index<this.amountOfVisibleElements*this.indexOfLastActiveDot-this.customChange) {
+                            this.elementsToCopy.push(sliderElement.cloneNode(true))
+                        }
+                    })
+                    this.elementsToCopy.forEach(elementToCopy => {
+                        this.slider.appendChild(elementToCopy)
+                    })
+                   
+                    this.elementsToCopy=[]
+    
+                    this.sliderElements.forEach((sliderElement,index)=>{
+                        if (index<this.amountOfVisibleElements*this.indexOfLastActiveDot-this.customChange) {
+                            this.slider.removeChild(sliderElement)
+                        }
+                    })
+                    this.addTransition(false)
+                    this.slider.style.transform=`translateX(-${0}px)`
+                    this.dotClicked=false
+                    this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+                    this.checkWhichDotNeedToBeActive("right")
+                  
+                },this.transition *1000)
+                
+                 return
+             }
             
-             return
-         }
+        }
         if (this.amountOfVisibleElements > 1) {
            
             if (this.lastElementWasClicked) {
