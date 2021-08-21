@@ -201,9 +201,9 @@ class MainSlider {
                             this.moveIntoPrevSlide()
                         }
                         this.readyToClick()
-                        if (this.sliderElements.length % this.amountOfVisibleElements) {
+                      
                             this.removeActiveForAnItems(this.controlPanelElements);
-                        };
+                       
                     };
                 };
                 if (this.animation === "vertical") {
@@ -211,9 +211,9 @@ class MainSlider {
                         this.canIClick = false
                         this.moveIntoPrevSlide()
                         this.readyToClick()
-                        if (this.sliderElements.length % this.amountOfVisibleElements) {
+                     
                             this.removeActiveForAnItems(this.controlPanelElements)
-                        }
+                      
                     }
                 }
 
@@ -238,9 +238,9 @@ class MainSlider {
 
                         }
                         this.readyToClick()
-                        if (this.sliderElements.length % this.amountOfVisibleElements) {
+                      
                             this.removeActiveForAnItems(this.controlPanelElements)
-                        }
+                        
                     }
                 }
                 if (this.animation === "vertical") {
