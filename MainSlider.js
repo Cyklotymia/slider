@@ -755,137 +755,10 @@ class MainSlider {
         });
         this.sliderElements[this.indexOfShowedSlider].classList.add("active")
     }
-    /// zmiana slidu w prawo ( dodanie odjecie slidow i przełożenie ich (append ))
-    // moveIntoNextSlide = (isCustom=null) => {
-    //   if (this.dotClicked && this.customChange ) {
-   
-    //      const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
-    //      this.addTransition(true)
-    //      this.slider.style.transform=`translateX(-${sliderWidth+this.customWidth}px)`
-    //     this.copyElementsForRight(isCustom)
-    //     setTimeout(()=>{
-    //         this.addTransition(false)
-        
-    //         this.removeCloneElementsForRight(isCustom)
-    //         this.slider.style.transform = `translateX(-${0}px)`
-    //         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-    //         this.checkWhichDotNeedToBeActive("left")
-    //         this.dotClicked=false
-    //         if (this.lastElementWasClicked) {
-    //             this.lastElementWasClicked=false
-    //             console.log(this.numberOfItemsToAppend);
-               
-                
-    //         }
-    //     },1000)
-    //       return
-    //   }
+
+
+    moveIntoNextSlide = () => {
        
-    //     if (this.amountOfVisibleElements > 1 && this.sliderElements.length%this.amountOfVisibleElements !== 0 ||this.amountOfVisibleElements > 1&& this.spaceFilled ) {
-      
-    //         if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[this.controlPanelElements.length - 1].classList.contains("active")) {
-              
-                
-               
-              
-    //              const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
-                
-    //             this.sliderElements.forEach((sliderElement, index) => {
-    //                 if (index >= numberOfItemsToDelate) {
-    //                     this.elementsToCopy.push(sliderElement.cloneNode(true))
-    //                 }
-    //                 this.elementsToCopy.forEach(elementToCopy => {
-    //                     this.slider.appendChild(elementToCopy)
-    //                 })
-    //                 this.elementsToCopy = []
-    //                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-    //             })   
-                
-              
-                
-    //         }
-            
-          
-    //     }
-
-    //     this.addTransition(true)
-    //     this.increseDotIndex()
-    //     if (this.animation === "horizontal") {
-    //         if (isCustom) {
-    //             this.slider.style.transform = `translateX(-${this.customWidth}px)`
-    //         }else{
-                
-    //             this.slider.style.transform = `translateX(-${this.widthOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
-    //         }
-            
-    //     }
-    //     if (this.animation === "vertical") {
-    //         this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider+1)}px)`
-    //     }
-    //     this.indexOfShowedSlider += 1
-    //     this.changeValueOfVariables()
-    //     this.copyElementsForRight(isCustom)
-    //     setTimeout(() => {
-    //         this.removeCloneElementsForRight(isCustom)
-    //         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-    //         this.addTransition(false)
-    //         this.slider.style.transform = `translateX(-${0}px)`
-    //         this.indexOfShowedSlider = 0
-    //         this.checkWhichDotNeedToBeActive("left")
-    //         if (this.amountOfVisibleElements > 1 &&this.sliderElements.length%this.amountOfVisibleElements !== 0 ) {
-    //             if (this.lastElementWasClicked || this.dotClicked && this.controlPanelElements[0].classList.contains("active")) {
-                  
-    //                 this.lastElementWasClicked = false
-    //                 const numberOfItemsToDelate = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
-                    
-
-    //                 const newSliders = []
-    //                 const lastSlides = []
-
-    //                 this.slider.innerHTML = ""
-    //                 this.startingSliderElements.forEach((sliderElement, index) => {
-    //                     if (index >= numberOfItemsToDelate) {
-    //                         newSliders.push(sliderElement)
-    //                     }
-
-
-    //                 })
-
-    //                 this.startingSliderElements.forEach((sliderElement, index) => {
-    //                     if (index < numberOfItemsToDelate) {
-    //                         lastSlides.push(sliderElement)
-    //                     }
-
-
-    //                 })
-
-    //                 newSliders.forEach(slide => {
-    //                     this.slider.appendChild(slide)
-    //                 })
-
-    //                 lastSlides.forEach(slide => {
-    //                     this.slider.appendChild(slide)
-    //                 })
-    //                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-
-    //                 this.checkWhichDotNeedToBeActive("left")
-
-
-    //             }
-    //         }
-
-    //         this.dotClicked = false
-
-    //     }, this.transition * 1000)
-
-
-
-
-
-    // }
-
-    moveIntoNextSlide = (isCustom=null) => {
-        this.checkWidth()
         if (this.dotClicked) {
          
             this.dotClicked=false
@@ -909,6 +782,7 @@ class MainSlider {
 
             setTimeout(()=>{
                 this.addTransition(true)
+                this.checkWidth("left")
                 this.slider.style.transform=`translateX(-${this.customWidth}px)`
                 this.copyElementsForRight()
             },100)
@@ -923,6 +797,7 @@ class MainSlider {
            
         }
         this.addTransition(true)
+        this.checkWidth("left")
         this.slider.style.transform=`translateX(-${this.customWidth}px)`
         this.copyElementsForRight()
         setTimeout(()=>{
@@ -933,11 +808,14 @@ class MainSlider {
             this.checkWhichDotNeedToBeActive("left")
         },this.transition*1000)
     }
-    checkWidth=()=>{
+    checkWidth=(way)=>{
+
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         this.customWidth=0
+
+        
         this.sliderElements.forEach((sliderElement,index)=>{
-            if (index<this.customChange) {
+            if (index<this.customChange && way ==="left" || way==="right" && index>this.sliderElements.length-1-this.customChange) {
                 const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
                 const marginLeft = style.marginLeft
                 const marginRight = style.marginRight
@@ -952,7 +830,7 @@ class MainSlider {
         if (activeIndex!==null) {
            this.sliderElements.forEach((sliderElement,index)=>{
                if (index<activeIndex && index>=itemsToNotCopy) {
-                   console.log(sliderElement.textContent + "  kopiuje");
+                   
 
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
                }
@@ -976,7 +854,7 @@ class MainSlider {
         if (activeIndex!==null) {
             this.sliderElements.forEach((sliderElement,index)=>{
                 if (index<activeIndex) {
-                    // console.log(sliderElement.textContent);
+                   
                     console.log(sliderElement.textContent + "  usuwam");
                  this.slider.removeChild(sliderElement)
                 }
@@ -1005,292 +883,42 @@ checkItemsToAppend=()=>{
 
 
 
-
-
-
-
-
-
-    /// meroda ktora kopiuje elementy dla ruchu w prawo
-    // copyElementsForRight = (isCustom=null) => {
-    //     let itemsToNOTCopy=0
-    //     if (this.amountOfVisibleElements > 1) {
-    //         if (isCustom) {
-    //             if (isCustom&& this.dotClicked ) {
-    //                 if (this.lastElementWasClicked) {
-    //                     itemsToNOTCopy = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
-                        
-    //                 }
-                   
-    //                 this.sliderElements.forEach((sliderElement,index)=>{
-    //                     if (index+1-this.customChange<=this.amountOfVisibleElements*this.indexOfLastActiveDot && index+1!==itemsToNOTCopy) {
-                          
-    //                        this.elementsToCopy.push(sliderElement.cloneNode(true))
-    //                     }
-    //                 })
-    //             }else{
-    //                 this.sliderElements.forEach((sliderElement,index)=>{
-                        
-    //                     if (index<parseInt(this.customChange)) {
-    //                      this.elementsToCopy.push(sliderElement.cloneNode(true))
-                         
-    //                     }
-    //                 })
-
-    //             }
-    //         }else{
-    //             this.sliderElements.forEach((sliderElement, index) => {
-    //                 if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
-    //                     this.elementsToCopy.push(sliderElement.cloneNode(true))
-    //                 }
-    //             })
-
-    //         }
-            
-    //     } else {
-    //         this.sliderElements.forEach((sliderElement, index) => {
-    //             if (index < this.indexOfShowedSlider) {
-    //                 this.elementsToCopy.push(sliderElement.cloneNode(true))
-    //             }
-    //         })
-    //     }
-
-
-    //     this.elementsToCopy.forEach(elementToCopy => {
-    //         this.slider.appendChild(elementToCopy)
-
-    //     })
-
-    //     this.elementsToCopy = []
-
-
-    // }
-    /// usuwa niepotrzebne elementy dla ruchu w prawo
-    // removeCloneElementsForRight = (isCustom=null) => {
-    //     if (this.amountOfVisibleElements > 1) {
-           
-    //         if (isCustom) {
-    //           if (this.dotClicked) {
-               
-    //             this.sliderElements.forEach((sliderElement,index)=>{
-    //                 if (index+1-this.customChange<=this.amountOfVisibleElements*this.indexOfLastActiveDot) {
-    //                     console.log(sliderElement.textContent + " usuwam");
-    //                     this.slider.removeChild(sliderElement)
-    //                 }
-    //             })
-    //           }else{
-    //               this.sliderElements.forEach((sliderElement,index)=>{
-    //                   if (index<parseInt(this.customChange)) {
-                         
-    //                    this.slider.removeChild(sliderElement)
-                       
-    //                   }
-    //               })
-
-    //           }
-    //         }else{
-    //             this.sliderElements.forEach((sliderElement, index) => {
-    //                 if (index < this.amountOfVisibleElements * this.indexOfShowedSlider) {
-    //                     this.slider.removeChild(sliderElement)
-    //                 }
-    //             })
-
-    //         }
-    //     } else {
-    //         this.sliderElements.forEach((sliderElement, index) => {
-    //             if (index < this.indexOfShowedSlider) {
-    //                 this.slider.removeChild(sliderElement)
-    //             }
-    //         })
-    //     }
-    //     this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-    // }
-
-    ///zmiana slidu w lewo ( dodajenie odjecie slidow i przełozenie ich ( prepend))
-    moveIntoPrevSlide = (isCustom=null) => {
-        if (!this.controlPanelElements[0].classList.contains("active") && !this.lastElementWasClicked) {
-            if (this.dotClicked && this.customChange) {
-       
-                const sliderWidth=parseInt(this.slider.style.transform.match(/\d/g).join(""))
-                this.addTransition(true)
-                this.slider.style.transform=`translateX(-${sliderWidth-this.customWidth}px)`
-                console.log(this.amountOfVisibleElements*this.indexOfShowedSlider);
-                setTimeout(()=>{
-                    this.sliderElements.forEach((sliderElement,index)=>{
-                        if (index<this.amountOfVisibleElements*this.indexOfLastActiveDot-this.customChange) {
-                            this.elementsToCopy.push(sliderElement.cloneNode(true))
-                        }
-                    })
-                    this.elementsToCopy.forEach(elementToCopy => {
-                        this.slider.appendChild(elementToCopy)
-                    })
-                   
-                    this.elementsToCopy=[]
-    
-                    this.sliderElements.forEach((sliderElement,index)=>{
-                        if (index<this.amountOfVisibleElements*this.indexOfLastActiveDot-this.customChange) {
-                            this.slider.removeChild(sliderElement)
-                        }
-                    })
-                    this.addTransition(false)
-                    this.slider.style.transform=`translateX(-${0}px)`
-                    this.dotClicked=false
-                    this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-                    this.checkWhichDotNeedToBeActive("right")
-                  
-                },this.transition *1000)
-                
-                 return
-             }
-            
-        }
-        if (this.amountOfVisibleElements > 1) {
-           
-            if (this.lastElementWasClicked&& !this.customChange) {
-          
-                this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-                this.addTransition(true)
-                // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
-                if (this.animation === "vertical") {
-                    this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider-1)}px)`
-                }
-                if (this.animation === "horizontal") {
-                
-                        this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider-1)}px)`
-
-                    // }
-                }
-                this.lastElementWasClicked = false
-                setTimeout(() => {
-                    this.resetContainer()
-                    this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-                    this.indexOfShowedSlider -= 1
-                    this.dotClicked = false
-                    this.checkWhichDotNeedToBeActive("right")
-                }, this.transition * 1000)
-                return
-            }
-            if (this.lastElementWasClicked && this.customChange) {
-                console.log('ok');
-                return
-            }
-            if (this.dotClicked && this.controlPanelElements[0].classList.contains("active")) {
-               
-                this.resetContainer()
-                this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-            }
-        }
-        this.dotClicked = false
-        this.addTransition(false)
-        this.copyElementsForLeft(isCustom)
-        this.lastElementWasClicked = false
-        // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
-        if (this.animation === "horizontal") {
-            if (isCustom) {
-                
-               
-                this.slider.style.transform = `translateX(-${this.customWidth}px)`  
-            }else{
-
-                this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
-            }
-        }
-        
-        if (this.animation === "vertical") {
-            this.slider.style.transform = `translateY(-${this.heightOfVisibleElement *(this.indexOfShowedSlider+1)}px)`
-        }
-        setTimeout(() => {
-            this.addTransition(true)
-            if (this.animation === "horizontal") {
-                if (isCustom) {
-                   console.log('end');
-                    this.slider.style.transform = `translateX(-${0}px)`
-                }else{
-
-                    this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
-                }
-            }
-            // this.slider.style.transform = `translateX(-${this.widthOfVisibleElement *this.indexOfShowedSlider}px)`
-            if (this.animation === "vertical") {
-                this.slider.style.transform = `translateY(-${this.heightOfVisibleElement*(this.indexOfShowedSlider)}px)`
-            }
-        }, this.transition * 100)
-        if (this.amountOfVisibleElements === 1) {
-            this.checkWhichDotNeedToBeActive("right")
-        }
-        setTimeout(() => {
-            if (isCustom) {
-                this.removeCloneElementsForLeft(isCustom)
-                
-            }else{
-
-                this.removeCloneElementsForLeft()
-            }
-            if (this.amountOfVisibleElements > 1) {
-                this.checkWhichDotNeedToBeActive("right")
-            }
-        }, this.transition * 1000)
+moveIntoPrevSlide=()=>{
+    this.checkWidth("right")
+    this.copyElementsForLeft()
+    this.addTransition(false)
+    this.slider.style.transform=`translateX(-${this.customWidth}px)`
+    setTimeout(()=>{
+        this.slider.style.transform=`translateX(0px)`
+        this.addTransition(true)
+        this.removeCloneElementsForLeft()
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-    }
-/// meroda ktora kopiuje elementy dla ruchu w lewo
-    copyElementsForLeft = (isCustom=null) => {
-      
-        if (isCustom) {
-     
-           this.sliderElements.forEach((sliderElement, index) => {
-               if (index >= this.sliderElements.length -parseInt(this.customChange) ) {
-                   console.log(sliderElement.textContent + " kopiuje");
-                   this.elementsToCopy.push(sliderElement.cloneNode(true))
-               }
-           })  
-
-       
-              
-                
-           
-
-            
-        }else{
-            this.sliderElements.forEach((sliderElement, index) => {
-                if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
-                    this.elementsToCopy.push(sliderElement.cloneNode(true))
-                }
-            })
-
+        this.checkWhichDotNeedToBeActive("left")
+    },100)
+}
+copyElementsForLeft=()=>{
+    this.sliderElements.forEach((sliderElement,index)=>{
+        if (index>this.sliderElements.length-1-this.customChange) {
+            console.log(sliderElement.textContent + " kopiuje");
+            this.elementsToCopy.push(sliderElement.cloneNode(true))
         }
-        this.elementsToCopy.reverse()
-        this.elementsToCopy.forEach(elementToCopy => {
-            this.slider.prepend(elementToCopy)
-        })
-        this.elementsToCopy = []
-    }
+    })
+    this.elementsToCopy.reverse()
+    this.elementsToCopy.forEach(elementToCopy => {
+        this.slider.prepend(elementToCopy)
+    })
+     this.elementsToCopy = []
+}
 
-    // usuwa niepotrzebne elementy dla ruchu w lewo
-    removeCloneElementsForLeft = (isCustom=null) => {
-      
-        if (isCustom) {
-          
-                this.sliderElements.forEach((sliderElement, index) => {
-                    if (index >= this.sliderElements.length - parseInt(this.customChange)) {
-                        console.log(sliderElement.textContent + "  usuwam");
-                        this.slider.removeChild(sliderElement)
-                    }
-                }) 
 
-            
-        }else{
-            this.sliderElements.forEach((sliderElement, index) => {
-                if (index >= this.sliderElements.length - this.amountOfVisibleElements) {
-                    this.slider.removeChild(sliderElement)
-                }
-            })
-
+removeCloneElementsForLeft=()=>{
+    this.sliderElements.forEach((sliderElement,index)=>{
+        if (index>this.sliderElements.length-1-this.customChange) {
+            console.log(sliderElement.textContent + " usuwam");
+            this.slider.removeChild(sliderElement)
         }
-        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-    }
-
-   
-
+    })
+}
   ////// METODY DLA NAWIGACJI
 
 
