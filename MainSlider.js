@@ -437,6 +437,9 @@ class MainSlider {
 
     //// odczytyje ilośc widocznych elementów ( bierze pod uwage margin)
     checkAmountOfElements = () => {
+        if (this.animation === "fade") {
+            this.amountOfVisibleElements=1
+        }
         const style = this.sliderElements[0].currentStyle || window.getComputedStyle(this.sliderElements[0]);
         let lastAmountOfVisibleElements;
         if (this.animation === "horizontal") {
@@ -542,16 +545,17 @@ class MainSlider {
     }
     /// tworzenie panelu z kropkami
     createControlPanel = (numberOfDots = null) => {
-        
+       
         let indexForDot = -1
         this.sliderElements.forEach((sliderElement, index) => {
-           
+            
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
                     // if (this.customChange>1) {
-                    //     return
-                    // }
+                        //     return
+                        // }
+                        
                     this.changeValueOfVariables()
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
@@ -559,7 +563,7 @@ class MainSlider {
                     this.isTheLast(parseInt(e.target.dataset.index))
                     this.indexManualyChanged = true
                     this.addActiveForAnItem(e.target)
-                 if (this.sliderElements.length % this.amountOfVisibleElements===0 ) {
+                 if (this.sliderElements.length % this.amountOfVisibleElements===0 && this.animation !=="fade" ) {
                     
                      if (!this.dotClicked) {
                          this.resetContainer()
@@ -617,6 +621,7 @@ class MainSlider {
                     if (this.animation === "fade") {
                         this.removeActiveForAnItems(this.sliderElements)
                         this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
+                        
                     }
                     if (this.amountOfVisibleElements === 1 && this.animation != "fade") {
                         this.resetContainer()
@@ -1085,7 +1090,7 @@ removeCloneElementsForLeft=()=>{
 
 /// data-animate="fade" => dla js__MainSlider  jak maja slidy sie przenikac przez siebie
 /// data-animate="horizontal" => dla js__MainSlider  jak slider jest lewo prawo
-/// data-changeSlide=1 => ruch slidu o 1 element
+/// data-changeSlide=1 => ruch slidu o 1 element PISAC ZAWSZE
 
 
 /// horizontal NIE MOZE BYC NTH CHILD STYLOWANE BO BEDA SIE ZMIENIAC CHILDY 
