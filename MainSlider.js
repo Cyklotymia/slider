@@ -884,6 +884,25 @@ checkItemsToAppend=()=>{
 
 
 moveIntoPrevSlide=()=>{
+    if (this.dotClicked) {
+        this.dotClicked=false
+        this.checkItemsToAppend()
+        if (this.lastElementWasClicked && this.numberOfItemsToAppend) {
+            this.lastElementWasClicked=false
+            this.copyElementsForRight(this.indexOfActiveSlide,this.numberOfItemsToAppend)
+            this.removeCloneElementsForRight(this.indexOfActiveSlide)
+            
+        }else{
+      
+        this.copyElementsForRight(this.indexOfActiveSlide)
+         this.removeCloneElementsForRight(this.indexOfActiveSlide)
+        }
+      
+        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+        this.addTransition(false)
+        this.slider.style.transform=`translateX(0px)`
+       
+    }
     this.checkWidth("right")
     this.copyElementsForLeft()
     this.addTransition(false)
@@ -896,13 +915,24 @@ moveIntoPrevSlide=()=>{
         this.checkWhichDotNeedToBeActive("left")
     },100)
 }
-copyElementsForLeft=()=>{
-    this.sliderElements.forEach((sliderElement,index)=>{
-        if (index>this.sliderElements.length-1-this.customChange) {
-            console.log(sliderElement.textContent + " kopiuje");
-            this.elementsToCopy.push(sliderElement.cloneNode(true))
-        }
-    })
+copyElementsForLeft=(activeIndex=null)=>{
+    if (activeIndex!==null) {
+        this.sliderElements.forEach((sliderElement,index)=>{
+            if (index>this.sliderElements.length-1-this.customChange) {
+                this.elementsToCopy.push(sliderElement.cloneNode(true))
+                console.log(sliderElement.textContent + " kopiuje");
+
+            }
+        })
+    }else{
+        this.sliderElements.forEach((sliderElement,index)=>{
+            if (index>this.sliderElements.length-1-this.customChange) {
+                console.log(sliderElement.textContent + " kopiuje");
+                this.elementsToCopy.push(sliderElement.cloneNode(true))
+            }
+        })
+
+    }
     this.elementsToCopy.reverse()
     this.elementsToCopy.forEach(elementToCopy => {
         this.slider.prepend(elementToCopy)
