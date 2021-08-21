@@ -885,6 +885,9 @@ checkItemsToAppend=()=>{
 
 moveIntoPrevSlide=()=>{
     if (this.dotClicked) {
+        if (this.sliderElements[0].classList.contains("active")) {
+            this.resetContainer()
+        }
         this.dotClicked=false
         this.checkItemsToAppend()
         if (this.lastElementWasClicked && this.numberOfItemsToAppend) {
