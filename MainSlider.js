@@ -553,9 +553,7 @@ class MainSlider {
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
-                    // if (this.customChange>1) {
-                        //     return
-                        // }
+                  
                         
                     this.changeValueOfVariables()
                     this.removeActiveForAnItems(this.sliderElements)
@@ -564,100 +562,118 @@ class MainSlider {
                     this.isTheLast(parseInt(e.target.dataset.index))
                     this.indexManualyChanged = true
                     this.addActiveForAnItem(e.target)
-                 if (this.sliderElements.length % this.amountOfVisibleElements===0 && this.animation !=="fade" ) {
-                    
-                     if (!this.dotClicked) {
-                         this.resetContainer()
-                         this.fadeElements(parseInt(e.target.dataset.index))
-                         this.dotClicked = true
-                         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
-                         this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
-                         return
-                         
-                     }
-                     if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
-                         
-                        this.lastElementWasClicked = true
-                        this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
-                        this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
-                        this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
-                        return
-                    }
 
-                 }
-                    if (this.amountOfVisibleElements > 1 && this.sliderElements.length % this.amountOfVisibleElements) {
+
+
+                    // this.resetContainer()
+                    this.findSlide()
+                    this.resetContainer()
+                    this.slider.style.transform=`translateX(-${this.customWidth}px)`
+                    this.addTransition(false)
+                    setTimeout(()=>{
+                        this.addTransition(true)
+                        this.findSlide(e.target.dataset.index)
+                        this.slider.style.transform=`translateX(-${this.customWidth}px)`
+                    },100)
+
+
+                //  if (this.sliderElements.length % this.amountOfVisibleElements===0 && this.animation !=="fade" ) {
+                    
+                //      if (!this.dotClicked) {
+                //          this.resetContainer()
+                //          this.fadeElements(parseInt(e.target.dataset.index))
+                //          this.dotClicked = true
+                //          this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
+                //          this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
+                //          return
+                         
+                //      }
+                //      if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
+                         
+                //         this.lastElementWasClicked = true
+                //         this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
+                //         this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
+                //         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
+                //         return
+                //     }
+
+                //  }
+                //     if (this.amountOfVisibleElements > 1 && this.sliderElements.length % this.amountOfVisibleElements) {
                      
                        
-                        if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
+                //         if (this.dotClicked && this.isTheLast(parseInt(e.target.dataset.index))) {
                            
                            
-                            this.lastElementWasClicked = true
-                            this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
-                            this.fillEmptySpace()
-                            this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
-                            return
-                        }
-                        if (this.dotClicked) {
+                //             this.lastElementWasClicked = true
+                //             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
+                //             this.fillEmptySpace()
+                //             this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
+                //             return
+                //         }
+                //         if (this.dotClicked) {
                            
-                            this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
-                            this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
-                            this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
-                            return
-                        }
-                        this.resetContainer()
-                        if (this.isTheLast(parseInt(e.target.dataset.index))) {
-                            this.lastElementWasClicked = true
-                            this.fillEmptySpace()
+                //             this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
+                //             this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
+                //             this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
+                //             return
+                //         }
+                //         this.resetContainer()
+                //         if (this.isTheLast(parseInt(e.target.dataset.index))) {
+                //             this.lastElementWasClicked = true
+                //             this.fillEmptySpace()
                             
-                        }
+                //         }
                        
-                        this.fadeElements(parseInt(e.target.dataset.index))
-                        this.dotClicked = true
-                        this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
-                        this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
-                        return
-                    }
-                    this.dotClicked = true
-                    this.changeIndexByClickOnDot(e)
-                    if (this.animation === "fade") {
-                        this.removeActiveForAnItems(this.sliderElements)
-                        this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
+                //         this.fadeElements(parseInt(e.target.dataset.index))
+                //         this.dotClicked = true
+                //         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
+                //         this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
+                //         return
+                //     }
+                //     this.dotClicked = true
+                //     this.changeIndexByClickOnDot(e)
+                //     if (this.animation === "fade") {
+                //         this.removeActiveForAnItems(this.sliderElements)
+                //         this.addActiveForAnItem(this.sliderElements[e.target.dataset.index])
                         
-                    }
-                    if (this.amountOfVisibleElements === 1 && this.animation != "fade") {
-                        this.resetContainer()
-                        this.addTransition(false)
-                        if (this.animation === "horizontal") {
-                            this.slider.style.transform = `translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
-                        }
-                        if (this.animation === "vertical") {
-                            this.slider.style.transform = `translateY(-${this.indexOfLastActiveDot*this.heightOfVisibleElement}px)`
-                        }
-                        // this.slider.style.transform = `translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
-                        this.indexOfShowedSlider = parseInt(e.target.dataset.index)
-                        setTimeout(() => {
-                            this.addTransition(true)
+                //     }
+                //     if (this.amountOfVisibleElements === 1 && this.animation != "fade") {
+                //         this.resetContainer()
+                //         this.addTransition(false)
+                //         if (this.animation === "horizontal") {
+                //             this.slider.style.transform = `translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
+                //         }
+                //         if (this.animation === "vertical") {
+                //             this.slider.style.transform = `translateY(-${this.indexOfLastActiveDot*this.heightOfVisibleElement}px)`
+                //         }
+                //         // this.slider.style.transform = `translateX(-${this.indexOfLastActiveDot*this.widthOfVisibleElement}px)`
+                //         this.indexOfShowedSlider = parseInt(e.target.dataset.index)
+                //         setTimeout(() => {
+                //             this.addTransition(true)
 
 
-                            if (this.animation === "horizontal") {
-                                this.slider.style.transform = `translateX(-${this.indexOfShowedSlider*this.widthOfVisibleElement}px)`
-                            }
-                            if (this.animation === "vertical") {
-                                this.slider.style.transform = `translateY(-${this.indexOfShowedSlider*this.heightOfVisibleElement}px)`
-                            }
-                            // this.slider.style.transform = `translateX(-${this.indexOfShowedSlider*this.widthOfVisibleElement}px)`
-                        }, 100)
-                        this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
-                        this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
-                        this.sliderElements = this.startingSliderElements
-                        return
-                    }
-                    if (this.animation === "horizontal" || this.animation === "vertical") {
+                //             if (this.animation === "horizontal") {
+                //                 this.slider.style.transform = `translateX(-${this.indexOfShowedSlider*this.widthOfVisibleElement}px)`
+                //             }
+                //             if (this.animation === "vertical") {
+                //                 this.slider.style.transform = `translateY(-${this.indexOfShowedSlider*this.heightOfVisibleElement}px)`
+                //             }
+                //             // this.slider.style.transform = `translateX(-${this.indexOfShowedSlider*this.widthOfVisibleElement}px)`
+                //         }, 100)
+                //         this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
+                //         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
+                //         this.sliderElements = this.startingSliderElements
+                //         return
+                //     }
+                //     if (this.animation === "horizontal" || this.animation === "vertical") {
                        
-                        this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
-                        this.dotClicked = true
-                        this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
-                    }
+                //         this.moveIntoSlideWithIndex(parseInt(e.target.dataset.index))
+                //         this.dotClicked = true
+                //         this.indexOfLastActiveDot = parseInt(e.target.dataset.index)
+                //     }
+
+
+
                     this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                 })
             }
@@ -665,6 +681,31 @@ class MainSlider {
         this.controlPanelElements = this.controlPanel.querySelectorAll(".js__MainSlider-control-element")
     }
 
+
+
+    findSlide=(dotIndex)=>{
+        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+        let searchingSlide;
+        if (dotIndex) {
+           searchingSlide=this.slider.querySelector(`[data-group="${dotIndex}"]`)
+           console.log(searchingSlide.textContent);
+        }else{
+            searchingSlide=this.sliderElements[0]
+
+        }
+    
+        this.customWidth=0
+        this.sliderElements.forEach((sliderElement,index)=>{
+            if (index<parseInt(searchingSlide.dataset.index)) {
+                
+                const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
+                const marginLeft = style.marginLeft
+                const marginRight = style.marginRight
+                this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
+            }
+        })
+      
+    }
      /// resetuje caly container w ktorym sa slidy i nadaje je od nowa tak jak byly na poczatku
      resetContainer = () => {
         this.slider.innerHTML = ""
