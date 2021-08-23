@@ -562,14 +562,21 @@ class MainSlider {
                     this.isTheLast(parseInt(e.target.dataset.index))
                     this.indexManualyChanged = true
                     this.addActiveForAnItem(e.target)
-
-
-
+                    this.indexOfLastActiveDot= e.target.dataset.index
+                    
+                    
                     // this.resetContainer()
-                    this.findSlide()
-                    this.resetContainer()
+                    if (!this.dotClicked) {
+                        this.findSlide()
+                        this.resetContainer() 
+                        this.addTransition(false)
+                    }else{
+                        this.findSlide(this.indexOfLastActiveDot)
+                        console.log(this.indexOfLastActiveDot);
+                        this.addTransition(true)
+                    }
                     this.slider.style.transform=`translateX(-${this.customWidth}px)`
-                    this.addTransition(false)
+                    this.dotClicked=true
                     setTimeout(()=>{
                         this.addTransition(true)
                         this.findSlide(e.target.dataset.index)
