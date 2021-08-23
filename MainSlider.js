@@ -192,14 +192,9 @@ class MainSlider {
                 if (this.animation === "horizontal") {
                     if (this.canIClick) {
                         this.canIClick = false
-                        if (this.customChange) {
-                            this.moveIntoPrevSlide(this.customWidth)
-                          
-                            
-                        }else{
-
+                       
                             this.moveIntoPrevSlide()
-                        }
+                     
                         this.readyToClick()
                       
                             this.removeActiveForAnItems(this.controlPanelElements);
@@ -229,14 +224,10 @@ class MainSlider {
                 if (this.animation === "horizontal") {
                     if (this.canIClick) {
                         this.canIClick = false
-                        if (this.customChange) {
-                            this.moveIntoNextSlide(this.customWidth)
+                       
+                            this.moveIntoNextSlide()
                         
 
-                        }else{
-                            this.moveIntoNextSlide()
-
-                        }
                         this.readyToClick()
                       
                             this.removeActiveForAnItems(this.controlPanelElements)
@@ -350,13 +341,10 @@ class MainSlider {
                 if (touchStart > touchEnd) {
                     if (this.canIClick) {
                         this.canIClick = false
-                        if (this.customChange) {
-                            this.moveIntoNextSlide(this.customWidth)
-
-                        }else{
+                       
                             this.moveIntoNextSlide()
 
-                        }
+                        
                         this.readyToClick()
                         if (this.sliderElements.length % this.amountOfVisibleElements) {
                             this.removeActiveForAnItems(this.controlPanelElements)
@@ -367,7 +355,7 @@ class MainSlider {
                     if (this.canIClick) {
                         this.canIClick = false
                         if (this.customChange) {
-                            this.moveIntoPrevSlide(this.customWidth)
+                            this.moveIntoPrevSlide()
                           
                             
                         }else{
@@ -424,14 +412,27 @@ class MainSlider {
     }
     customCount=()=>{
         const numberOfSliders = parseInt(this.customChange)
-        this.sliderElements.forEach((sliderElement,index)=>{
-            if (index<numberOfSliders) {
-                const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
-                const marginLeft = style.marginLeft
-                const marginRight = style.marginRight
-                this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
-            }
-        })
+       
+            this.sliderElements.forEach((sliderElement,index)=>{
+                if (index<numberOfSliders) {
+                    const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
+                    const marginLeft = style.marginLeft
+                    const marginRight = style.marginRight
+                    const marginTop = style.marginTop
+                    const marginBottom = style.marginBottom
+                    if(this.animation === "horizontal"){
+
+                        this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
+                    }
+                    if(this.animation === "vertical"){
+                        this.customWidth+=sliderElement.offsetHeight + parseFloat(marginBottom.substr(0, marginBottom.length - 2)) +  parseFloat(marginTop.substr(0, marginTop.length - 2))
+                        console.log(this.customWidth)
+                    }
+                }
+            })
+
+        
+
        
     }
 
@@ -738,15 +739,13 @@ class MainSlider {
                 this.increaseIndex();
             }
             if (this.animation === "horizontal" || this.animation === "vertical") {
-                if (this.customChange) {
-                    this.moveIntoNextSlide(this.customWidth)
-                }else{
+             
                     this.moveIntoNextSlide()
 
-                }
-                if (this.sliderElements.length % this.amountOfVisibleElements) {
+                
+               
                     this.removeActiveForAnItems(this.controlPanelElements)
-                }
+                
             }
         }, this.intervalTime)
     }
@@ -767,7 +766,15 @@ class MainSlider {
         if (this.dotClicked) {
          
             this.dotClicked=false
-            this.slider.style.transform=`translateX(0px)`
+            // this.slider.style.transform=`translateX(0px)`
+            if (this.animation==="horizontal") {
+                this.slider.style.transform=`translateX(0px)`
+                  
+            }
+            if (this.animation==="vertical") {
+                this.slider.style.transform=`translateY(0px)`
+
+            }
             this.checkItemsToAppend()
             
             if (this.lastElementWasClicked && this.numberOfItemsToAppend) {
@@ -787,14 +794,33 @@ class MainSlider {
 
             setTimeout(()=>{
                 this.addTransition(true)
-                this.checkWidth("left")
-                this.slider.style.transform=`translateX(-${this.customWidth}px)`
+                if (this.animation==="horizontal") {
+                    this.checkWidth("left")
+                    
+                }
+                if (this.animation==="vertical") {
+                    this.checkHeight("left")
+                    
+                }
+                if (this.animation==="horizontal") {
+                    this.slider.style.transform=`translateX(-${this.customWidth}px)`    
+                }
+                if (this.animation==="vertical") {
+                    this.slider.style.transform=`translateY(-${this.customWidth}px)`  
+                }
                 this.copyElementsForRight()
             },100)
             setTimeout(()=>{
                 this.addTransition(false)
                 this.removeCloneElementsForRight()
-                this.slider.style.transform=`translateX(0px)`
+                if (this.animation==="horizontal") {
+                    this.slider.style.transform=`translateX(0px)`
+                      
+                }
+                if (this.animation==="vertical") {
+                    this.slider.style.transform=`translateY(0px)`
+ 
+                }
                 this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
                 this.checkWhichDotNeedToBeActive("left")
             },this.transition*1000)
@@ -802,12 +828,33 @@ class MainSlider {
            
         }
         this.addTransition(true)
-        this.checkWidth("left")
-        this.slider.style.transform=`translateX(-${this.customWidth}px)`
+        if (this.animation==="horizontal") {
+            this.checkWidth("left")
+            
+        }
+        if (this.animation==="vertical") {
+            this.checkHeight("left")
+            
+        }
+        // this.slider.style.transform=`translateX(-${this.customWidth}px)`
+        if (this.animation==="horizontal") {
+            this.slider.style.transform=`translateX(-${this.customWidth}px)`    
+        }
+        if (this.animation==="vertical") {
+            this.slider.style.transform=`translateY(-${this.customWidth}px)`  
+        }
         this.copyElementsForRight()
         setTimeout(()=>{
             this.addTransition(false)
-            this.slider.style.transform=`translateX(0px)`
+            // this.slider.style.transform=`translateX(0px)`
+            if (this.animation==="horizontal") {
+                this.slider.style.transform=`translateX(0px)`
+                  
+            }
+            if (this.animation==="vertical") {
+                this.slider.style.transform=`translateY(0px)`
+
+            }
             this.removeCloneElementsForRight()
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             this.checkWhichDotNeedToBeActive("left")
@@ -825,6 +872,23 @@ class MainSlider {
                 const marginLeft = style.marginLeft
                 const marginRight = style.marginRight
                 this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
+            }
+        })
+       
+    }
+
+    checkHeight=(way)=>{
+
+        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
+        this.customWidth=0
+
+        
+        this.sliderElements.forEach((sliderElement,index)=>{
+            if (index<this.customChange && way ==="left" || way==="right" && index>this.sliderElements.length-1-this.customChange) {
+                const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
+                const marginTop = style.marginTop
+                const marginBottom = style.marginBottom
+                this.customWidth+=sliderElement.offsetHeight + parseFloat(marginTop.substr(0, marginTop.length - 2)) +  parseFloat(marginBottom.substr(0, marginBottom.length - 2))
             }
         })
        
@@ -889,6 +953,8 @@ checkItemsToAppend=()=>{
 
 
 moveIntoPrevSlide=()=>{
+  
+
     if (this.dotClicked) {
         if (this.sliderElements[0].classList.contains("active")) {
             this.resetContainer()
@@ -911,10 +977,23 @@ moveIntoPrevSlide=()=>{
         this.slider.style.transform=`translateX(0px)`
        
     }
-    this.checkWidth("right")
+    if (this.animation==="horizontal") {
+        this.checkWidth("right")
+        
+    }
+    if (this.animation==="vertical") {
+        this.checkHeight("right")
+        
+    }
     this.copyElementsForLeft()
     this.addTransition(false)
-    this.slider.style.transform=`translateX(-${this.customWidth}px)`
+    if (this.animation==="horizontal") {
+        this.slider.style.transform=`translateX(-${this.customWidth}px)`    
+    }
+    if (this.animation==="vertical") {
+        this.slider.style.transform=`translateY(-${this.customWidth}px)`  
+    }
+    // this.slider.style.transform=`translateX(-${this.customWidth}px)`
     setTimeout(()=>{
         this.slider.style.transform=`translateX(0px)`
         this.addTransition(true)
