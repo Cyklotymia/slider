@@ -579,12 +579,24 @@ class MainSlider {
                         this.resetContainer() 
                         this.fillEmptySpace()
                     }
-                    this.slider.style.transform=`translateX(-${this.customWidth}px)`
+                    if (this.animation === "horizontal") {
+                        this.slider.style.transform=`translateX(-${this.customWidth}px)`
+                        
+                    }
+                    if (this.animation === "vertical") {
+                        this.slider.style.transform=`translateY(-${this.customWidth}px)`
+                    }
                     this.dotClicked=true
                     setTimeout(()=>{
                         this.addTransition(true)
                         this.findSlide(e.target.dataset.index)
-                        this.slider.style.transform=`translateX(-${this.customWidth}px)`
+                        if (this.animation === "horizontal") {
+                            this.slider.style.transform=`translateX(-${this.customWidth}px)`
+                            
+                        }
+                        if (this.animation === "vertical") {
+                            this.slider.style.transform=`translateY(-${this.customWidth}px)`
+                        }
                     },100)
                     this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                 })
@@ -608,15 +620,29 @@ class MainSlider {
         }
     
         this.customWidth=0
-        this.sliderElements.forEach((sliderElement,index)=>{
-            if (index<parseInt(searchingSlide.dataset.index)) {
-                
-                const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
-                const marginLeft = style.marginLeft
-                const marginRight = style.marginRight
-                this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
-            }
-        })
+        if (this.animation==="hotizontal") {
+            this.sliderElements.forEach((sliderElement,index)=>{
+                if (index<parseInt(searchingSlide.dataset.index)) {
+                    
+                    const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
+                    const marginLeft = style.marginLeft
+                    const marginRight = style.marginRight
+                    this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
+                }
+            })
+            
+        }
+        if (this.animation === "vertical") {
+            this.sliderElements.forEach((sliderElement,index)=>{
+                if (index<parseInt(searchingSlide.dataset.index)) {
+                    
+                    const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
+                    const marginTop = style.marginTop
+                    const marginBottom = style.marginBottom
+                    this.customWidth+=sliderElement.offsetHeight + parseFloat(marginTop.substr(0, marginTop.length - 2)) +  parseFloat(marginBottom.substr(0, marginBottom.length - 2))
+                }
+            })
+        }
       
     }
      /// resetuje caly container w ktorym sa slidy i nadaje je od nowa tak jak byly na poczatku
