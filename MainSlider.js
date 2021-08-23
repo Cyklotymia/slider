@@ -553,8 +553,6 @@ class MainSlider {
             if (numberOfDots && index % numberOfDots === 0) {
                 indexForDot += 1
                 this.createElement("div", "js__MainSlider-control-element", indexForDot, this.controlPanel).addEventListener("click", (e) => {
-                  
-                        
                     this.changeValueOfVariables()
                     this.lastElementWasClicked = false
                     this.isTheLast(parseInt(e.target.dataset.index))
@@ -563,7 +561,11 @@ class MainSlider {
                     this.removeActiveForAnItems(this.sliderElements)
                     this.removeActiveForAnItems(this.controlPanelElements)
                     this.addActiveForAnItem(e.target)
-                    
+                    if (this.animation ==="fade") {
+                        this.indexOfShowedSlider=parseInt(e.target.dataset.index)
+                        this.addActiveForAnItem(this.sliderElements[this.indexOfShowedSlider])
+                        return
+                    }
 
                     if (!this.dotClicked) {
                         this.findSlide()
@@ -573,16 +575,10 @@ class MainSlider {
                         this.findSlide(this.indexOfLastActiveDot)
                         this.addTransition(true)
                     }
-
-
-
                     if (this.lastElementWasClicked) {
                         this.resetContainer() 
                         this.fillEmptySpace()
-                   
                     }
-
-
                     this.slider.style.transform=`translateX(-${this.customWidth}px)`
                     this.dotClicked=true
                     setTimeout(()=>{
@@ -593,8 +589,10 @@ class MainSlider {
                     this.checkWhichDotNeedToBeActive("dot", parseInt(e.target.dataset.index))
                 })
             }
+        
         })
         this.controlPanelElements = this.controlPanel.querySelectorAll(".js__MainSlider-control-element")
+    
     }
 
 
