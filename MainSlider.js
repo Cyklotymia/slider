@@ -426,7 +426,6 @@ class MainSlider {
                     }
                     if(this.animation === "vertical"){
                         this.customWidth+=sliderElement.offsetHeight + parseFloat(marginBottom.substr(0, marginBottom.length - 2)) +  parseFloat(marginTop.substr(0, marginTop.length - 2))
-                        console.log(this.customWidth)
                     }
                 }
             })
@@ -507,7 +506,6 @@ class MainSlider {
             const activeElement = this.slider.querySelector(`[data-group="${index}"]`)
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(activeElement)
-            console.log(activeElement.textContent + " aaaaaaaaaaa");
         }
         if (way === "right") {
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
@@ -573,9 +571,18 @@ class MainSlider {
                         this.addTransition(false)
                     }else{
                         this.findSlide(this.indexOfLastActiveDot)
-                        console.log(this.indexOfLastActiveDot);
                         this.addTransition(true)
                     }
+
+
+
+                    if (this.lastElementWasClicked) {
+                        this.resetContainer() 
+                        this.fillEmptySpace()
+                   
+                    }
+
+
                     this.slider.style.transform=`translateX(-${this.customWidth}px)`
                     this.dotClicked=true
                     setTimeout(()=>{
@@ -597,7 +604,6 @@ class MainSlider {
         let searchingSlide;
         if (dotIndex) {
            searchingSlide=this.slider.querySelector(`[data-group="${dotIndex}"]`)
-           console.log(searchingSlide.textContent);
         }else{
             searchingSlide=this.sliderElements[0]
 
@@ -728,9 +734,10 @@ class MainSlider {
             this.checkItemsToAppend()
             
             if (this.lastElementWasClicked && this.numberOfItemsToAppend) {
+                console.log('robie');
                 this.lastElementWasClicked=false
                 this.copyElementsForRight(this.indexOfActiveSlide,this.numberOfItemsToAppend)
-                this.removeCloneElementsForRight(this.indexOfActiveSlide)
+                this.removeCloneElementsForRight(this.indexOfActiveSlide,this.numberOfItemsToAppend)
                 
             }else{
                 this.copyElementsForRight(this.indexOfActiveSlide)
@@ -849,8 +856,6 @@ class MainSlider {
         if (activeIndex!==null) {
            this.sliderElements.forEach((sliderElement,index)=>{
                if (index<activeIndex && index>=itemsToNotCopy) {
-                   
-
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
                }
            })
@@ -864,23 +869,23 @@ class MainSlider {
 
         }
         this.elementsToCopy.forEach(elementToCopy => {
+            console.log(elementToCopy.textContent + " kopiuje");
                     this.slider.appendChild(elementToCopy)
                 })
                  this.elementsToCopy = []
     }
 
-    removeCloneElementsForRight=(activeIndex=null)=>{
+    removeCloneElementsForRight=(activeIndex=null,itemsToDelate=null)=>{
         if (activeIndex!==null) {
             this.sliderElements.forEach((sliderElement,index)=>{
                 if (index<activeIndex) {
-                   
-                    console.log(sliderElement.textContent + "  usuwam");
                  this.slider.removeChild(sliderElement)
                 }
             })
         }else{
             this.sliderElements.forEach((sliderElement,index)=>{
                 if (index<this.customChange) {
+                    console.log(sliderElement.textContent + " usuwam ");
                     this.slider.removeChild(sliderElement)
                 }
             })
@@ -957,14 +962,12 @@ copyElementsForLeft=(activeIndex=null)=>{
         this.sliderElements.forEach((sliderElement,index)=>{
             if (index>this.sliderElements.length-1-this.customChange) {
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
-                console.log(sliderElement.textContent + " kopiuje");
 
             }
         })
     }else{
         this.sliderElements.forEach((sliderElement,index)=>{
             if (index>this.sliderElements.length-1-this.customChange) {
-                console.log(sliderElement.textContent + " kopiuje");
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
             }
         })
@@ -981,7 +984,6 @@ copyElementsForLeft=(activeIndex=null)=>{
 removeCloneElementsForLeft=()=>{
     this.sliderElements.forEach((sliderElement,index)=>{
         if (index>this.sliderElements.length-1-this.customChange) {
-            console.log(sliderElement.textContent + " usuwam");
             this.slider.removeChild(sliderElement)
         }
     })
@@ -994,7 +996,9 @@ removeCloneElementsForLeft=()=>{
       this.spaceFilled=true
     this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
     const itemsToAppend = []
-    this.numberOfItemsToAppend = this.amountOfVisibleElements - (this.sliderElements.length % this.amountOfVisibleElements)
+  this.numberOfItemsToAppend=0
+    this.numberOfItemsToAppend = this.amountOfVisibleElements - (this.startingSliderElements.length % this.amountOfVisibleElements)
+
     for (let index = 0; index < this.numberOfItemsToAppend; index++) {
         itemsToAppend.push(this.sliderElements[index].cloneNode(true))
     }
