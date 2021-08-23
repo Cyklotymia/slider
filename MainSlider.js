@@ -26,6 +26,8 @@ class MainSlider {
         // rodzaj animacji dla slidera
         this.animation = null; 
         this.customChange=null;
+
+        this.focus=null
         
 
         /// ukrywanie obiektów podczas braku eventów wjazdu myszki na slider
@@ -58,6 +60,8 @@ class MainSlider {
         this.remaindMeLastIndex = this.indexOfShowedSlider 
         // elementy które muszą pozostać skopiowane i wrzucone jako prepend/append
         this.elementsToCopy = []
+
+    
  
 
         /// flagi
@@ -74,6 +78,8 @@ class MainSlider {
         this.mediaQueryList = window.matchMedia("(orientation: portrait)");
 
         this.spaceFilled = false
+
+        
        
      
         /// poczatkowe funcje inicjalizujace slider
@@ -118,11 +124,14 @@ class MainSlider {
         this.isHiddenLeft = this.arrowLeft.classList.contains("js__MainSlider-hidden") ?? null;
         this.isHiddenRight = this.arrowRight.classList.contains("js__MainSlider-hidden") ?? null;
         this.isHiddenControler = this.controlPanel.classList.contains("js__MainSlider-hidden") ?? null;
+        this.focus = this.slider.dataset.focus ? parseInt(this.slider.dataset.focus):0
         this.touches = this.slider.dataset.mobile ?? null;
         this.animation = this.slider.dataset.animate ?? null;
         this.widthOfVisibleElement = this.slider.offsetWidth;
         this.heightOfVisibleElement = this.section.offsetHeight;
         this.customChange=this.slider.dataset.changeslide ?? null;
+        
+        
         
     
     };
@@ -494,11 +503,11 @@ class MainSlider {
     /// metoda ustalająca która kropka jest aktywna i dopasowująca do niej slider ( pierwszy od lewej) z grupy odpowiadającej indexowi elementu nawigacji
     checkWhichDotNeedToBeActive = (way, index = null) => {
         if (way === "left") {
-            const searchingDotWithIndex = parseInt(this.sliderElements[0].dataset.group)
+            const searchingDotWithIndex = parseInt(this.sliderElements[this.focus].dataset.group)
             
             this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
             this.removeActiveForAnItems(this.sliderElements)
-            this.addActiveForAnItem(this.sliderElements[0])
+            this.addActiveForAnItem(this.sliderElements[this.focus])
             return
         }
         if (way === "dot") {
@@ -507,27 +516,7 @@ class MainSlider {
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(activeElement)
         }
-        if (way === "right") {
-            this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-            this.sliderElements.forEach((sliderElement, index) => {
-                if (sliderElement.classList.contains("active")) {
-                    this.reduceDotIndex()
-                    this.removeActiveForAnItems(this.sliderElements)
-                    this.removeActiveForAnItems(this.controlPanelElements)
-                    let activeSlide = this.sliderElements[index - this.amountOfVisibleElements]
-                    if (this.customChange) {
-                        activeSlide = this.sliderElements[index - parseInt(this.customChange)]
-                    }
-                    if (!activeSlide) {
-                        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-                        activeSlide = this.sliderElements[this.sliderElements.length - 1]
-                    }
-                    this.addActiveForAnItem(activeSlide)
-                    const activeDot = parseInt(activeSlide.dataset.group)
-                    this.addActiveForAnItem(this.controlPanelElements[activeDot])
-                }
-            })
-        }
+    
     }
 
 
@@ -1150,5 +1139,5 @@ removeCloneElementsForLeft=()=>{
 /// data-animate="horizontal" => dla js__MainSlider  jak slider jest lewo prawo
 /// data-changeSlide=1 => ruch slidu o 1 element PISAC ZAWSZE
 
-
+/// data-focus="2" -> ktory z widocznych slidow ma dostawac active (index)
 /// horizontal NIE MOZE BYC NTH CHILD STYLOWANE BO BEDA SIE ZMIENIAC CHILDY 
