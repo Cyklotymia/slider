@@ -576,9 +576,12 @@ class MainSlider {
                         this.addTransition(true)
                     }
                     if (this.lastElementWasClicked) {
-                        this.resetContainer() 
+                    
+                            this.resetContainer() 
+
+                       
+                        }
                         this.fillEmptySpace()
-                    }
                     if (this.animation === "horizontal") {
                         this.slider.style.transform=`translateX(-${this.customWidth}px)`
                         
@@ -620,7 +623,7 @@ class MainSlider {
         }
     
         this.customWidth=0
-        if (this.animation==="hotizontal") {
+        if (this.animation==="horizontal") {
             this.sliderElements.forEach((sliderElement,index)=>{
                 if (index<parseInt(searchingSlide.dataset.index)) {
                     
@@ -758,7 +761,7 @@ class MainSlider {
             this.checkItemsToAppend()
             
             if (this.lastElementWasClicked && this.numberOfItemsToAppend) {
-                console.log('robie');
+               
                 this.lastElementWasClicked=false
                 this.copyElementsForRight(this.indexOfActiveSlide,this.numberOfItemsToAppend)
                 this.removeCloneElementsForRight(this.indexOfActiveSlide,this.numberOfItemsToAppend)
@@ -893,7 +896,6 @@ class MainSlider {
 
         }
         this.elementsToCopy.forEach(elementToCopy => {
-            console.log(elementToCopy.textContent + " kopiuje");
                     this.slider.appendChild(elementToCopy)
                 })
                  this.elementsToCopy = []
@@ -909,7 +911,6 @@ class MainSlider {
         }else{
             this.sliderElements.forEach((sliderElement,index)=>{
                 if (index<this.customChange) {
-                    console.log(sliderElement.textContent + " usuwam ");
                     this.slider.removeChild(sliderElement)
                 }
             })
