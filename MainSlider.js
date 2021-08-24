@@ -186,7 +186,7 @@ class MainSlider {
     initSlider = () => {
         if (this.photoContainer) {
             this.showPhoto()
-            console.log('dodac listenery do sliderkow');
+            this.showPhotoByClickOnElement()
             console.log('pobierac url sliderkow');
             console.log('wdupcac do photocontainera');
             
@@ -513,6 +513,7 @@ class MainSlider {
 
     /// metoda ustalająca która kropka jest aktywna i dopasowująca do niej slider ( pierwszy od lewej) z grupy odpowiadającej indexowi elementu nawigacji
     checkWhichDotNeedToBeActive = (way, index = null) => {
+       
         if (way === "left") {
             const searchingDotWithIndex = parseInt(this.sliderElements[this.focus].dataset.group)
             
@@ -660,6 +661,7 @@ class MainSlider {
         this.startingSliderElements.forEach(sliderElement => {
             this.slider.appendChild(sliderElement)
         })
+   
     }
 
     ////// METODY DLA INDEXU
@@ -891,6 +893,7 @@ class MainSlider {
         if (activeIndex!==null) {
            this.sliderElements.forEach((sliderElement,index)=>{
                if (index<activeIndex && index>=itemsToNotCopy) {
+               
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
                }
            })
@@ -898,6 +901,7 @@ class MainSlider {
         }else{
             this.sliderElements.forEach((sliderElement,index)=>{
                 if (index<this.customChange) {
+                    sliderElement.dataset.listen=false
                     this.elementsToCopy.push(sliderElement.cloneNode(true))
                 }
             })
@@ -907,6 +911,7 @@ class MainSlider {
                     this.slider.appendChild(elementToCopy)
                 })
                  this.elementsToCopy = []
+               
     }
 
     removeCloneElementsForRight=(activeIndex=null,itemsToDelate=null)=>{
@@ -948,7 +953,7 @@ showPhoto=()=>{
     })
     const style = activeSlide.currentStyle || window.getComputedStyle(activeSlide);
    const imageUrl=style.backgroundImage
-   console.log(imageUrl);
+   console.log('pokazuje');
    this.photoContainer.style.backgroundImage=imageUrl
 }
 
@@ -1007,6 +1012,7 @@ copyElementsForLeft=(activeIndex=null)=>{
     if (activeIndex!==null) {
         this.sliderElements.forEach((sliderElement,index)=>{
             if (index>this.sliderElements.length-1-this.customChange) {
+               
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
 
             }
@@ -1014,6 +1020,7 @@ copyElementsForLeft=(activeIndex=null)=>{
     }else{
         this.sliderElements.forEach((sliderElement,index)=>{
             if (index>this.sliderElements.length-1-this.customChange) {
+             
                 this.elementsToCopy.push(sliderElement.cloneNode(true))
             }
         })
@@ -1021,9 +1028,11 @@ copyElementsForLeft=(activeIndex=null)=>{
     }
     this.elementsToCopy.reverse()
     this.elementsToCopy.forEach(elementToCopy => {
+        
         this.slider.prepend(elementToCopy)
     })
      this.elementsToCopy = []
+  
 }
 
 
@@ -1106,7 +1115,16 @@ removeCloneElementsForLeft=()=>{
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         this.indexOfLastActiveDot = index
     }
-   
+   showPhotoByClickOnElement=()=>{
+   this.slider.addEventListener("click",(e)=>{
+    if (e.target.classList.contains("js__MainSlider-element")) {
+        const allSlides = this.slider.querySelectorAll(".js__MainSlider-element")
+        this.removeActiveForAnItems(allSlides)
+        this.addActiveForAnItem(e.target)
+        this.showPhoto()
+    }
+   })
+   }
 
 //// METODY NIWELUJACE POWTARZAJĄCY SIE KOD
 
