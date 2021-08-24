@@ -187,8 +187,7 @@ class MainSlider {
         if (this.photoContainer) {
             this.showPhoto()
             this.showPhotoByClickOnElement()
-            console.log('pobierac url sliderkow');
-            console.log('wdupcac do photocontainera');
+         
             
 
         }
@@ -374,18 +373,13 @@ class MainSlider {
                 } else {
                     if (this.canIClick) {
                         this.canIClick = false
-                        if (this.customChange) {
+                 
                             this.moveIntoPrevSlide()
-                          
-                            
-                        }else{
-
-                            this.moveIntoPrevSlide()
-                        }
+                       
                         this.readyToClick()
-                        if (this.sliderElements.length % this.amountOfVisibleElements) {
+                      
                             this.removeActiveForAnItems(this.controlPanelElements)
-                        }
+                        
                     }
                 }
             }
@@ -953,7 +947,6 @@ showPhoto=()=>{
     })
     const style = activeSlide.currentStyle || window.getComputedStyle(activeSlide);
    const imageUrl=style.backgroundImage
-   console.log('pokazuje');
    this.photoContainer.style.backgroundImage=imageUrl
 }
 
@@ -1117,7 +1110,10 @@ removeCloneElementsForLeft=()=>{
     }
    showPhotoByClickOnElement=()=>{
    this.slider.addEventListener("click",(e)=>{
-    if (e.target.classList.contains("js__MainSlider-element")) {
+   
+    if (e.target.classList.contains("js__MainSlider-element") && this.canIClick) {
+        this.canIClick = false
+        this.readyToClick()
         const allSlides = this.slider.querySelectorAll(".js__MainSlider-element")
         this.removeActiveForAnItems(allSlides)
         this.addActiveForAnItem(e.target)
@@ -1125,21 +1121,18 @@ removeCloneElementsForLeft=()=>{
         this.goIntoShowedPhoto(e.target)
     }
    })
+    
    }
 
    goIntoShowedPhoto=(activeSlide)=>{
     this.sliderElements.forEach((sliderElement,index)=>{
         if (sliderElement===activeSlide) {
             if (this.focus===index) {
-                console.log('nic nie rob');
                 return
             }
             this.addTransition(true)
-            // this.slider.style.transform=`translateX()`
             const elementsToChange=this.focus-index
-            
-                console.log('lewo');
-              this.customSlide(elementsToChange)
+         this.customSlide(elementsToChange)
             
            
         }
@@ -1183,6 +1176,40 @@ removeCloneElementsForLeft=()=>{
             
 
 
+       }
+
+       if (elementsToChange<0) {
+          
+        this.sliderElements.forEach((sliderElement,index)=>{
+            if (index<elementsToChange*-1) {
+                
+             const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
+                 const marginLeft = style.marginLeft
+                  const marginRight = style.marginRight
+                this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
+             this.elementsToCopy.push(sliderElement.cloneNode(true))
+            }
+
+        })
+        
+        
+        this.elementsToCopy.forEach(elementToCopy => {
+            
+            this.slider.appendChild(elementToCopy)
+        })
+         this.elementsToCopy = [] 
+         this.slider.style.transform=`translateX(-${this.customWidth}px)`
+         this.addTransition(true)
+         setTimeout(()=>{
+             this.addTransition(false)
+             this.slider.style.transform=`translateX(${0}px)`
+             this.sliderElements.forEach((sliderElement,index)=>{
+              if (index<elementsToChange*-1) {
+               this.slider.removeChild(sliderElement)
+              }
+          })
+          this.sliderElements=this.slider.querySelectorAll(".js__MainSlider-element")
+         },this.transition*1000)
        }
 
 
