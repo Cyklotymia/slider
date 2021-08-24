@@ -448,16 +448,16 @@ align-items: center;
  
  .js__MainSlider-photo{
      background-color: red;
-     width: 100%;
+     max-width: 100%;
      height: 400px;
      background-repeat: no-repeat;
      background-position: center;
-
+     margin: 50px;
      background-size: cover;
     
  }
  .photo{
-    filter: blur(4px);
+    filter: blur(3px);
      background-repeat: no-repeat;
      background-position: center;
 

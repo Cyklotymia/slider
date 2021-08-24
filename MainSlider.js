@@ -41,6 +41,7 @@ class MainSlider {
 
         // kontrolki do navigacji
         this.controlPanelElements = null; 
+        this.photoContainer=null
         // ilość widocznych elementów  w jednym slidzie
         this.amountOfVisibleElements = null;
         // szerokość kontenera z overflow, czyli ograniczającego widocznośc slidów
@@ -130,6 +131,8 @@ class MainSlider {
         this.widthOfVisibleElement = this.slider.offsetWidth;
         this.heightOfVisibleElement = this.section.offsetHeight;
         this.customChange=this.slider.dataset.changeslide ?? null;
+        this.photoContainer=document.querySelector(`[id="${this.section.dataset.photo}"]`)??null
+      
         
         
         
@@ -181,6 +184,14 @@ class MainSlider {
     }
     //// metoda odpalająca funkcje zgodnie z wyzej ustalonymi zmiennymi
     initSlider = () => {
+        if (this.photoContainer) {
+            console.log('ten ktory ma active jest widoczny');
+            console.log('dodac listenery do sliderkow');
+            console.log('pobierac url sliderkow');
+            console.log('wdupcac do photocontainera');
+            
+
+        }
     
         if (this.controlPanel) {
           
@@ -513,7 +524,6 @@ class MainSlider {
         if (way === "dot") {
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             const activeElement = this.slider.querySelector(`[data-group="${index}"]`)
-            console.log(activeElement.dataset.index);
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(this.sliderElements[parseInt(activeElement.dataset.index)+this.focus])
         }
@@ -567,11 +577,11 @@ class MainSlider {
                     }
                     if (this.lastElementWasClicked) {
                     
-                            this.resetContainer() 
+                        this.resetContainer() 
+                        this.fillEmptySpace()
 
                        
                         }
-                        this.fillEmptySpace()
                     if (this.animation === "horizontal") {
                         this.slider.style.transform=`translateX(-${this.customWidth}px)`
                         
@@ -926,7 +936,7 @@ moveIntoPrevSlide=()=>{
   
 
     if (this.dotClicked) {
-        if (this.sliderElements[0].classList.contains("active")) {
+        if (this.sliderElements[0].dataset.index==0) {
             this.resetContainer()
         }
         this.dotClicked=false
@@ -1129,6 +1139,8 @@ removeCloneElementsForLeft=()=>{
 /// js__MainSlider-element => dla każdego slida
 /// js__MainSlider-control-element => dla kazdej kropki I TO STYLOWAC
 /// js__MainSlider-hidden => na strzalki pojedyncze LUB/I na kontener z kropkami czy maja byc schowane jak nie ma na nich myszki
+/// js__MainSlider-photo => tu bedzie wyswietlane zdjecie DODAC MU ID TAKIE JAKA MA KLASE CONTAINER
+
 
 
 /// daty
