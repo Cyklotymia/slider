@@ -513,18 +513,16 @@ class MainSlider {
 
     /// metoda ustalająca która kropka jest aktywna i dopasowująca do niej slider ( pierwszy od lewej) z grupy odpowiadającej indexowi elementu nawigacji
     checkWhichDotNeedToBeActive = (way, index = null) => {
-        if (this.photoContainer) {
-            return
-        }
+       
         if (way === "left") {
             const searchingDotWithIndex = parseInt(this.sliderElements[this.focus].dataset.group)
-            
-            this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
+            if (!this.photoContainer) {
+                this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
+                
+            }
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(this.sliderElements[this.focus])
-            if (this.photoContainer) {
-                this.showPhoto()
-            }
+         
             return
         }
         if (way === "dot") {
