@@ -287,7 +287,7 @@ class MainSlider {
 
     //// metoda dodająca active do elementu nawigacji
     addStartedActive = () => {
-        this.controlPanelElements[this.indexOfShowedSlider].classList.add("active");
+        this.controlPanelElements[0].classList.add("active");
     }
     
     //// metoda która grupuje elementy slidera (data-group)
