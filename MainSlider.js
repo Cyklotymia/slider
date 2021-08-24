@@ -185,7 +185,7 @@ class MainSlider {
     //// metoda odpalająca funkcje zgodnie z wyzej ustalonymi zmiennymi
     initSlider = () => {
         if (this.photoContainer) {
-            console.log('ten ktory ma active jest widoczny');
+            this.showPhoto()
             console.log('dodac listenery do sliderkow');
             console.log('pobierac url sliderkow');
             console.log('wdupcac do photocontainera');
@@ -519,6 +519,9 @@ class MainSlider {
             this.addActiveForAnItem(this.controlPanelElements[searchingDotWithIndex])
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(this.sliderElements[this.focus])
+            if (this.photoContainer) {
+                this.showPhoto()
+            }
             return
         }
         if (way === "dot") {
@@ -526,6 +529,9 @@ class MainSlider {
             const activeElement = this.slider.querySelector(`[data-group="${index}"]`)
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(this.sliderElements[parseInt(activeElement.dataset.index)+this.focus])
+            if (this.photoContainer) {
+                this.showPhoto()
+            }
         }
     
     }
@@ -842,7 +848,9 @@ class MainSlider {
             this.removeCloneElementsForRight()
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             this.checkWhichDotNeedToBeActive("left")
+          
         },this.transition*1000)
+       
     }
     checkWidth=(way)=>{
 
@@ -930,7 +938,19 @@ checkItemsToAppend=()=>{
 }
 
 
+showPhoto=()=>{
+    let activeSlide
 
+    this.sliderElements.forEach((sliderElement,index)=>{
+        if (sliderElement.classList.contains("active")) {
+           activeSlide=sliderElement
+        }
+    })
+    const style = activeSlide.currentStyle || window.getComputedStyle(activeSlide);
+   const imageUrl=style.backgroundImage
+   console.log(imageUrl);
+   this.photoContainer.style.backgroundImage=imageUrl
+}
 
 moveIntoPrevSlide=()=>{
   
@@ -980,6 +1000,7 @@ moveIntoPrevSlide=()=>{
         this.removeCloneElementsForLeft()
         this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
         this.checkWhichDotNeedToBeActive("left")
+       
     },100)
 }
 copyElementsForLeft=(activeIndex=null)=>{
@@ -1032,29 +1053,7 @@ removeCloneElementsForLeft=()=>{
         
     })
 }
-    //// klik w kropke po raz pierwszy dodaje animacje pojawiania sie sliderow 
-    fadeElements = (index) => {
-        this.addTransition(false)
-        if (this.animation === "horizontal") {
-            this.slider.style.transform = `translateX(-${index*this.widthOfVisibleElement}px)`
-        }
-        if (this.animation === "vertical") {
-            this.slider.style.transform = `translateY(-${index*this.heightOfVisibleElement}px)`
-        }
-        // this.slider.style.transform = `translateX(-${index*this.widthOfVisibleElement}px)`
-        this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
-        let delay = 0.1
-        this.indexOfShowedSlider = index
-        this.sliderElements.forEach((sliderElement, index) => {
-            delay = index % this.amountOfVisibleElements * 0.1
-            this.sliderElements[index].style.transitionDelay = `${delay}s`;
-            sliderElement.style.opacity = "0"
-            setTimeout(() => {
-                sliderElement.style.transitionDuration = `.5s`
-                sliderElement.style.opacity = "1"
-            }, 200)
-        })
-    }
+  
 
     moveIntoSlideWithIndex = (index) => {
         if (index === this.controlPanelElements.length - 1) {
