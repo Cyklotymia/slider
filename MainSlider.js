@@ -1122,8 +1122,70 @@ removeCloneElementsForLeft=()=>{
         this.removeActiveForAnItems(allSlides)
         this.addActiveForAnItem(e.target)
         this.showPhoto()
+        this.goIntoShowedPhoto(e.target)
     }
    })
+   }
+
+   goIntoShowedPhoto=(activeSlide)=>{
+    this.sliderElements.forEach((sliderElement,index)=>{
+        if (sliderElement===activeSlide) {
+            if (this.focus===index) {
+                console.log('nic nie rob');
+                return
+            }
+            this.addTransition(true)
+            // this.slider.style.transform=`translateX()`
+            const elementsToChange=this.focus-index
+            
+                console.log('lewo');
+              this.customSlide(elementsToChange)
+            
+           
+        }
+    })
+   }
+
+   customSlide=(elementsToChange)=>{
+   this.customWidth=0
+       
+       if (elementsToChange>0) {
+           this.sliderElements.forEach((sliderElement,index)=>{
+               if (index>this.sliderElements.length-1-elementsToChange) {
+                const style = this.sliderElements[index].currentStyle || window.getComputedStyle(this.sliderElements[index]);
+                    const marginLeft = style.marginLeft
+                     const marginRight = style.marginRight
+                   this.customWidth+=sliderElement.offsetWidth + parseFloat(marginRight.substr(0, marginRight.length - 2)) +  parseFloat(marginLeft.substr(0, marginLeft.length - 2))
+                this.elementsToCopy.push(sliderElement.cloneNode(true))
+               }
+
+           })
+           
+           this.elementsToCopy.reverse()
+           this.elementsToCopy.forEach(elementToCopy => {
+               
+               this.slider.prepend(elementToCopy)
+           })
+            this.elementsToCopy = []
+            this.addTransition(false)
+            this.slider.style.transform=`translateX(-${this.customWidth}px)`
+           setTimeout(()=>{
+            this.addTransition(true)
+            this.slider.style.transform=`translateX(${0}px)`
+            this.sliderElements.forEach((sliderElement,index)=>{
+                if (index>this.sliderElements.length-1-elementsToChange) {
+                 this.slider.removeChild(sliderElement)
+                }
+            })
+            this.sliderElements=this.slider.querySelectorAll(".js__MainSlider-element")
+           },100)
+
+            
+
+
+       }
+
+
    }
 
 //// METODY NIWELUJACE POWTARZAJĄCY SIE KOD
