@@ -193,12 +193,14 @@ class MainSlider {
         }
     
         if (this.controlPanel) {
-          
-            this.checkAmountOfElements();
-            this.createControlPanel(this.amountOfVisibleElements)
-            this.groupSliderElements();
-          
-            this.addStartedActive();
+          if (!this.photoContainer) {
+             
+              this.checkAmountOfElements();
+              this.createControlPanel(this.amountOfVisibleElements)
+              this.groupSliderElements();
+              
+              this.addStartedActive();
+            }
         };
         if (this.arrowLeft) {
             this.arrowLeft.addEventListener("click", () => {
@@ -283,11 +285,15 @@ class MainSlider {
         }
         if (this.animation === "horizontal") {
             this.readWidthOfVisibleElement()
+            if (!this.photoContainer) {
             this.addStartedActive();
+            }
         }
         if (this.animation === "vertical") {
             this.readHeightOfVisibleElement()
+            if (!this.photoContainer) {
             this.addStartedActive();
+            }
         }
         if (this.customChange) {
             this.customCount()
@@ -507,7 +513,9 @@ class MainSlider {
 
     /// metoda ustalająca która kropka jest aktywna i dopasowująca do niej slider ( pierwszy od lewej) z grupy odpowiadającej indexowi elementu nawigacji
     checkWhichDotNeedToBeActive = (way, index = null) => {
-       
+        if (this.photoContainer) {
+            return
+        }
         if (way === "left") {
             const searchingDotWithIndex = parseInt(this.sliderElements[this.focus].dataset.group)
             
@@ -1218,10 +1226,16 @@ removeCloneElementsForLeft=()=>{
 //// METODY NIWELUJACE POWTARZAJĄCY SIE KOD
 
 
-    addActiveForAnItem = (item) => {
+    addActiveForAnItem = (item=null) => {
+        if (!item) {
+            return
+        }
         item.classList.add("active")
     }
-    removeActiveForAnItems = (groupOfItems) => {
+    removeActiveForAnItems = (groupOfItems=null) => {
+        if (!groupOfItems) {
+            return
+        }
         groupOfItems.forEach(item => {
             item.classList.remove("active")
         })
