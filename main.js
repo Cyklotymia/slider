@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 
 // const slider4= new MainSlider("container4")
-const slider5= new MainSlider("container5")
+// const slider5= new MainSlider("container5")
+const slider6= new MainSlider("container6")
  
 })

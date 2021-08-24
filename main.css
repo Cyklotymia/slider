@@ -446,3 +446,88 @@ align-items: center;
 
 
  
+ .js__MainSlider-photo{
+     background-color: red;
+     width: 100%;
+     height: 400px;
+     background-repeat: no-repeat;
+     background-position: center;
+
+     background-size: cover;
+    
+ }
+ .photo{
+    filter: blur(4px);
+     background-repeat: no-repeat;
+     background-position: center;
+
+     background-size: cover;
+     max-height: 100%;
+    height: 100%;
+    min-width: 18%;
+   border: 2px solid black;
+   box-sizing: border-box;
+   margin: 1%;
+   transition: filter .3s;
+  
+ }
+
+ .photo.active{
+     filter: blur(0);
+ }
+ .photo1{
+    background-image: url("./imgs/pies1.jpg");
+
+ }
+ .photo2{
+    background-image: url("./imgs/pies2.jpg");
+
+ }
+ .photo3{
+    background-image: url("./imgs/pies3.jpg");
+
+ }
+ .photo4{
+    background-image: url("./imgs/pies4.jpg");
+
+ }
+ .photo5{
+    background-image: url("./imgs/pies5.jpg");
+
+ }
+ .photo6{
+    background-image: url("./imgs/pies6.jpg");
+
+ }
+ .photo7{
+    background-image: url("./imgs/pies7.jpg");
+
+ }
+ .photo8{
+    background-image: url("./imgs/pies8.jpg");
+
+ }
+
+ .slider6{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    height: 150px;
+    transition: 0.5s;
+    margin-top: 20px;
+    position: relative;
+    
+    
+}
+
+.container6{
+   
+    margin: 50px;
+    overflow: hidden;
+    max-width: 100%;
+    position: relative;
+    
+}
+

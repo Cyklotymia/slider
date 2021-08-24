@@ -513,8 +513,9 @@ class MainSlider {
         if (way === "dot") {
             this.sliderElements = this.slider.querySelectorAll(".js__MainSlider-element")
             const activeElement = this.slider.querySelector(`[data-group="${index}"]`)
+            console.log(activeElement.dataset.index);
             this.removeActiveForAnItems(this.sliderElements)
-            this.addActiveForAnItem(activeElement)
+            this.addActiveForAnItem(this.sliderElements[parseInt(activeElement.dataset.index)+this.focus])
         }
     
     }
