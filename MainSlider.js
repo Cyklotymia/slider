@@ -54,7 +54,7 @@ class MainSlider {
         // cały interval dla slidera
         this.intervalForSlider = null;
         // czas animacji (mnożony razy 1000)
-        this.transition = 1
+        this.transition = 0.5
         // index poprzednio kliknietego elementu nawigacji
         this.indexOfLastActiveDot = 0
         // ostatni index aktywnego slidera
@@ -522,6 +522,9 @@ class MainSlider {
             }
             this.removeActiveForAnItems(this.sliderElements)
             this.addActiveForAnItem(this.sliderElements[this.focus])
+            if (this.photoContainer) {
+                this.showPhoto()
+            }
          
             return
         }
